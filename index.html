@@ -4,7 +4,7 @@
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0">
 <title>C.T.D.M.I. – Angiologia e Cirurgia Vascular</title>
-<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Pinyon+Script&display=swap" rel="stylesheet">
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&display=swap" rel="stylesheet">
 <style>
   *{margin:0;padding:0;box-sizing:border-box}
   :root{
@@ -28,132 +28,65 @@
     background:rgba(255,255,255,0.88);
     -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
     display:flex;align-items:center;justify-content:space-between;
-    padding:0 6vw;height:74px;
-    border-bottom:1px solid var(--line);
+    padding:0 6vw;height:74px;border-bottom:1px solid var(--line);
   }
   .nav-logo{display:flex;flex-direction:column;text-decoration:none;line-height:1.15}
   .nav-logo-text{color:var(--ink);font-size:20px;font-weight:800;letter-spacing:1px}
   .nav-logo-sub{color:var(--teal);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
   .nav-right{display:flex;align-items:center;gap:28px}
-  .nav-links{display:flex;gap:34px;list-style:none}
+  .nav-links{display:flex;gap:30px;list-style:none}
   .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;transition:color .2s}
   .nav-links a:hover{color:var(--teal)}
   .nav-cta{
-    background:var(--teal);color:#fff;
-    border:none;padding:11px 22px;border-radius:100px;
-    font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;
-    transition:all .2s;white-space:nowrap;
+    background:var(--teal);color:#fff;border:none;padding:11px 22px;border-radius:100px;
+    font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;transition:all .2s;white-space:nowrap;
   }
   .nav-cta:hover{background:var(--teal-dark);transform:translateY(-1px)}
-  /* Hamburger */
   .nav-toggle{
     display:none;flex-direction:column;justify-content:center;gap:5px;
-    width:42px;height:42px;border:none;background:var(--teal-soft);border-radius:11px;
-    cursor:pointer;padding:0;transition:background .2s;
+    width:42px;height:42px;border:none;background:var(--teal-soft);border-radius:11px;cursor:pointer;padding:0;transition:background .2s;
   }
   .nav-toggle:hover{background:#dde4f4}
-  .nav-toggle span{
-    display:block;width:18px;height:2px;background:var(--teal-dark);border-radius:2px;
-    margin:0 auto;transition:transform .3s ease,opacity .25s ease;
-  }
+  .nav-toggle span{display:block;width:18px;height:2px;background:var(--teal-dark);border-radius:2px;margin:0 auto;transition:transform .3s ease,opacity .25s ease}
   .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
   .nav-toggle.open span:nth-child(2){opacity:0}
   .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
 
   /* HERO */
-  .hero{
-    padding:150px 6vw 100px;
-    background:linear-gradient(180deg,var(--bg-soft) 0%, #fff 100%);
-    position:relative;overflow:hidden;
-  }
-  .hero::after{
-    content:'';position:absolute;top:-100px;right:-120px;
-    width:520px;height:520px;border-radius:50%;
-    background:radial-gradient(circle, var(--teal-soft) 0%, transparent 70%);
-    z-index:0;
-  }
-  .hero-inner{
-    position:relative;z-index:1;
-    display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:center;
-    max-width:1240px;margin:0 auto;
-  }
-  .hero-eyebrow{
-    display:inline-flex;align-items:center;gap:8px;
-    background:#fff;border:1px solid var(--line);
-    color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
-    padding:7px 16px;border-radius:100px;margin-bottom:24px;
-    box-shadow:0 2px 12px rgba(6,18,54,0.05);
-  }
+  .hero{padding:138px 6vw 80px;background:linear-gradient(180deg,var(--bg-soft) 0%, #fff 100%);position:relative;overflow:hidden}
+  .hero::after{content:'';position:absolute;top:-100px;right:-120px;width:520px;height:520px;border-radius:50%;background:radial-gradient(circle, var(--teal-soft) 0%, transparent 70%);z-index:0}
+  .hero-inner{position:relative;z-index:1;display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:center;max-width:1240px;margin:0 auto}
+  .hero-eyebrow{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;padding:7px 16px;border-radius:100px;margin-bottom:24px;box-shadow:0 2px 12px rgba(6,18,54,0.05)}
   .hero-eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block}
-  .hero h1{
-    font-family:'Fraunces',serif;
-    font-size:clamp(2.4rem,4.5vw,3.7rem);
-    color:var(--ink);line-height:1.1;margin-bottom:20px;font-weight:600;
-    letter-spacing:-.5px;
-  }
+  .hero h1{font-family:'Fraunces',serif;font-size:clamp(2.3rem,4.5vw,3.7rem);color:var(--ink);line-height:1.1;margin-bottom:20px;font-weight:600;letter-spacing:-.5px}
   .hero h1 em{color:var(--teal);font-style:normal}
-  .hero-desc{
-    color:var(--muted);font-size:17px;line-height:1.75;
-    margin-bottom:36px;max-width:480px;
-  }
-  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
-  .btn-primary{
-    background:var(--teal);color:#fff;
-    padding:15px 30px;border-radius:100px;
-    font-weight:700;font-size:15px;text-decoration:none;
-    transition:all .2s;
-    display:inline-flex;align-items:center;gap:10px;
-    box-shadow:0 8px 24px rgba(22,53,127,0.28);
-  }
+  .hero-desc{color:var(--muted);font-size:17px;line-height:1.75;margin-bottom:34px;max-width:480px}
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:38px}
+  .btn-primary{background:var(--teal);color:#fff;padding:15px 30px;border-radius:100px;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:10px;box-shadow:0 8px 24px rgba(22,53,127,0.28)}
   .btn-primary:hover{background:var(--teal-dark);transform:translateY(-2px)}
-  .btn-outline{
-    background:#fff;border:1.5px solid var(--line);color:var(--ink);
-    padding:15px 30px;border-radius:100px;
-    font-weight:600;font-size:15px;text-decoration:none;
-    transition:all .2s;
-    display:inline-flex;align-items:center;gap:8px;
-  }
+  .btn-outline{background:#fff;border:1.5px solid var(--line);color:var(--ink);padding:15px 30px;border-radius:100px;font-weight:600;font-size:15px;text-decoration:none;transition:all .2s;display:inline-flex;align-items:center;justify-content:center;gap:8px}
   .btn-outline:hover{border-color:var(--teal);color:var(--teal)}
   .hero-trust{display:flex;gap:30px;flex-wrap:wrap}
   .trust-item{display:flex;flex-direction:column}
   .trust-num{font-family:'Fraunces',serif;font-size:1.9rem;font-weight:600;color:var(--ink);line-height:1}
   .trust-label{font-size:13px;color:var(--muted);margin-top:4px;font-weight:500}
-
-  /* HERO VISUAL */
   .hero-visual{position:relative}
-  .hero-img{aspect-ratio:4/5}
+  .hero-img{aspect-ratio:4/5;border-radius:28px;overflow:hidden;border:1px solid var(--line)}
+  .hero-img img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
 
-  /* Placeholder de foto moderno */
-  .photo-ph{
-    border-radius:28px;overflow:hidden;position:relative;width:100%;height:100%;
-    background:
-      linear-gradient(135deg, rgba(22,53,127,0.06), rgba(22,53,127,0.02)),
-      repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(22,53,127,0.025) 14px, rgba(22,53,127,0.025) 28px),
-      var(--teal-soft);
-    border:1.5px dashed rgba(22,53,127,0.25);
-    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px;
-  }
-  .photo-ph::before{
-    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,0.5),transparent);
-    animation:shimmer 3.2s infinite;
-  }
+  /* PLACEHOLDER FOTO */
+  .photo-ph{border-radius:28px;overflow:hidden;position:relative;width:100%;height:100%;
+    background:linear-gradient(135deg, rgba(22,53,127,0.06), rgba(22,53,127,0.02)),repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(22,53,127,0.025) 14px, rgba(22,53,127,0.025) 28px),var(--teal-soft);
+    border:1.5px dashed rgba(22,53,127,0.25);display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px}
+  .photo-ph::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,0.5),transparent);animation:shimmer 3.2s infinite}
   @keyframes shimmer{0%{left:-60%}60%,100%{left:120%}}
-  .photo-ph .ph-icon{
-    width:78px;height:78px;border-radius:22px;background:#fff;
-    display:flex;align-items:center;justify-content:center;
-    box-shadow:0 10px 30px rgba(6,18,54,0.1);position:relative;z-index:1;
-  }
+  .photo-ph .ph-icon{width:78px;height:78px;border-radius:22px;background:#fff;display:flex;align-items:center;justify-content:center;box-shadow:0 10px 30px rgba(6,18,54,0.1);position:relative;z-index:1}
   .photo-ph .ph-icon svg{width:38px;height:38px;stroke:var(--teal);stroke-width:1.6;fill:none}
   .photo-ph .ph-label{position:relative;z-index:1}
   .photo-ph .ph-label strong{display:block;font-size:15px;font-weight:700;color:var(--teal-dark)}
   .photo-ph .ph-label span{font-size:12.5px;color:var(--muted)}
 
-  .float-card{
-    position:absolute;background:#fff;border-radius:16px;
-    padding:16px 18px;box-shadow:0 12px 40px rgba(6,18,54,0.12);
-    display:flex;align-items:center;gap:12px;z-index:2;
-  }
+  .float-card{position:absolute;background:#fff;border-radius:16px;padding:16px 18px;box-shadow:0 12px 40px rgba(6,18,54,0.12);display:flex;align-items:center;gap:12px;z-index:2}
   .float-card.fc1{bottom:30px;left:-30px}
   .float-card.fc2{top:40px;right:-24px}
   .fc-icon{width:40px;height:40px;border-radius:10px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
@@ -166,129 +99,62 @@
   /* SECTIONS */
   section{padding:100px 6vw}
   .wrap{max-width:1240px;margin:0 auto}
-  .section-tag{
-    display:inline-flex;align-items:center;gap:8px;
-    color:var(--teal);font-size:12px;font-weight:700;letter-spacing:1px;
-    text-transform:uppercase;margin-bottom:14px;
-  }
+  .section-tag{display:inline-flex;align-items:center;gap:8px;color:var(--teal);font-size:12px;font-weight:700;letter-spacing:1px;text-transform:uppercase;margin-bottom:14px}
   .section-tag::before{content:'';width:24px;height:2px;background:var(--teal);display:inline-block;border-radius:2px}
-  .section-title{
-    font-family:'Fraunces',serif;
-    font-size:clamp(1.9rem,3.2vw,2.7rem);
-    color:var(--ink);line-height:1.15;margin-bottom:18px;font-weight:600;letter-spacing:-.5px;
-  }
+  .section-title{font-family:'Fraunces',serif;font-size:clamp(1.9rem,3.2vw,2.7rem);color:var(--ink);line-height:1.15;margin-bottom:18px;font-weight:600;letter-spacing:-.5px}
   .section-desc{color:var(--muted);font-size:17px;line-height:1.7;max-width:600px}
   .center{text-align:center;display:flex;flex-direction:column;align-items:center}
   .center .section-desc{margin:0 auto}
 
+  /* ===== TOPO: AGENDA + MÉDICO (DESTAQUE) ===== */
+  .topo-agenda{background:var(--bg-soft);position:relative;overflow:hidden;padding-top:90px}
+  .topo-agenda::before{content:'';position:absolute;top:-140px;right:-120px;width:460px;height:460px;border-radius:50%;background:radial-gradient(circle,var(--teal-soft),transparent 70%);z-index:0}
+  .ta-grid{position:relative;z-index:1;display:grid;grid-template-columns:0.92fr 1.08fr;gap:30px;align-items:start;margin-top:44px}
+  /* card médico */
+  .ta-doctor{background:#fff;border:1px solid var(--line);border-radius:24px;overflow:hidden;box-shadow:0 18px 50px rgba(6,18,54,0.07)}
+  .ta-photo{position:relative;aspect-ratio:4/3}
+  .ta-photo .photo-ph{border-radius:0}
+  .ta-photo img{width:100%;height:100%;object-fit:cover;object-position:center top;display:block}
+  .ta-photo .crm-badge{position:absolute;bottom:16px;left:16px;z-index:2;background:var(--teal);color:#fff;font-size:12px;font-weight:700;padding:8px 15px;border-radius:100px;box-shadow:0 6px 20px rgba(22,53,127,0.3)}
+  .ta-info{padding:26px 28px 30px}
+  .ta-role{font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:8px}
+  .ta-name{font-family:'Fraunces',serif;font-size:1.7rem;font-weight:600;color:var(--ink);margin-bottom:14px;line-height:1.15}
+  .ta-bio{color:var(--muted);font-size:14.5px;line-height:1.75;margin-bottom:18px;text-align:justify;text-justify:inter-word}
+  .ta-tags{display:flex;flex-wrap:wrap;gap:8px}
+  .ta-tags span{font-size:12px;font-weight:600;color:var(--ink);background:var(--bg-soft);border:1px solid var(--line);padding:6px 12px;border-radius:100px}
+  /* card agenda em destaque */
+  .ta-agenda{background:#fff;border:2px solid var(--teal);border-radius:24px;overflow:hidden;box-shadow:0 22px 60px rgba(22,53,127,0.16)}
+  .ta-agenda-head{background:var(--teal);color:#fff;padding:22px 28px;text-align:center;position:relative;overflow:hidden}
+  .ta-agenda-head::after{content:'';position:absolute;top:-40px;right:-30px;width:140px;height:140px;border-radius:50%;background:radial-gradient(circle,rgba(143,176,236,0.25),transparent 70%)}
+  .ta-agenda-head h3{font-family:'Fraunces',serif;font-size:1.45rem;font-weight:600;margin-bottom:4px;position:relative}
+  .ta-agenda-head p{font-size:13.5px;color:rgba(255,255,255,0.85);position:relative}
+  .ta-agenda-body{padding:22px}
+  .ta-agenda-body #zl-url{display:block;text-decoration:none}
+  .ta-whats{display:flex;align-items:center;justify-content:center;gap:10px;margin-top:16px;background:#25d366;color:#fff;padding:15px 24px;border-radius:100px;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s}
+  .ta-whats:hover{background:#1fb85a;transform:translateY(-2px)}
+  .ta-whats svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none}
+
   /* SOBRE */
-  .sobre{background:var(--bg-soft)}
+  .sobre{background:var(--bg)}
   .sobre-inner{display:grid;grid-template-columns:0.85fr 1.15fr;gap:64px;align-items:center}
   .sobre-img{aspect-ratio:3/4;position:relative}
   .sobre-img .photo-ph{border-radius:24px}
-  .crm-badge{
-    position:absolute;bottom:20px;left:20px;z-index:2;
-    background:var(--teal);color:#fff;
-    font-size:12px;font-weight:700;padding:9px 16px;border-radius:100px;
-    box-shadow:0 6px 20px rgba(22,53,127,0.3);
-  }
+  .crm-badge{position:absolute;bottom:20px;left:20px;z-index:2;background:var(--teal);color:#fff;font-size:12px;font-weight:700;padding:9px 16px;border-radius:100px;box-shadow:0 6px 20px rgba(22,53,127,0.3)}
   .sobre-text p{color:var(--muted);font-size:16px;line-height:1.85;margin-bottom:16px;text-align:justify;text-justify:inter-word}
   .sobre-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
-  .sobre-list li{
-    display:flex;align-items:center;gap:12px;
-    color:var(--ink);font-size:14.5px;font-weight:600;
-  }
+  .sobre-list li{display:flex;align-items:center;gap:12px;color:var(--ink);font-size:14.5px;font-weight:600}
   .sobre-list li svg{width:22px;height:22px;stroke:var(--teal);stroke-width:2;fill:none;flex-shrink:0}
 
   /* ESPECIALIDADES */
   .esp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:56px}
-  .esp-card{
-    background:#fff;border:1px solid var(--line);
-    border-radius:20px;padding:32px 28px;
-    transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease;
-  }
-  .esp-card:hover{
-    border-color:var(--teal);
-    transform:translateY(-6px);
-    box-shadow:0 18px 44px rgba(6,18,54,0.09);
-  }
-  .esp-icon{
-    width:56px;height:56px;border-radius:16px;
-    background:var(--teal-soft);
-    display:flex;align-items:center;justify-content:center;
-    margin-bottom:22px;
-    transition:background .3s ease, transform .3s ease;
-  }
+  .esp-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:32px 28px;transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease}
+  .esp-card:hover{border-color:var(--teal);transform:translateY(-6px);box-shadow:0 18px 44px rgba(6,18,54,0.09)}
+  .esp-icon{width:56px;height:56px;border-radius:16px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;margin-bottom:22px;transition:background .3s ease, transform .3s ease}
   .esp-icon svg{width:28px;height:28px;stroke:var(--teal);stroke-width:1.6;fill:none;transition:stroke .3s ease}
   .esp-card:hover .esp-icon{background:var(--teal);transform:scale(1.05)}
   .esp-card:hover .esp-icon svg{stroke:#fff}
   .esp-card h3{color:var(--ink);font-size:18px;font-weight:700;margin-bottom:10px}
   .esp-card p{color:var(--muted);font-size:14.5px;line-height:1.7}
-
-  /* EQUIPE — layout premium de médico único */
-  .equipe{background:var(--bg-soft)}
-  .doctor-card{
-    max-width:840px;margin:56px auto 0;
-    background:#fff;border:1px solid var(--line);border-radius:28px;overflow:hidden;
-    display:grid;grid-template-columns:300px 1fr;
-    box-shadow:0 24px 60px rgba(6,18,54,0.07);
-  }
-  .doctor-photo{position:relative;min-height:340px}
-  .doctor-photo .photo-ph{border-radius:0}
-  .doctor-info{padding:44px 44px}
-  .doctor-info .d-role{font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
-  .doctor-info h3{font-family:'Monotype Corsiva','Pinyon Script',cursive;font-size:3rem;font-weight:400;color:var(--ink);margin-bottom:10px;line-height:1.1}
-  .doctor-info .d-crm{display:inline-block;font-size:12px;color:var(--teal);background:var(--teal-soft);padding:6px 14px;border-radius:100px;font-weight:700;margin-bottom:20px}
-  .doctor-info p{color:var(--muted);font-size:15px;line-height:1.8;margin-bottom:24px;text-align:justify;text-justify:inter-word}
-  .doctor-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
-  .doctor-tags span{font-size:12.5px;font-weight:600;color:var(--ink);background:var(--bg-soft);border:1px solid var(--line);padding:6px 14px;border-radius:100px}
-  .doctor-cta{
-    display:inline-flex;align-items:center;gap:10px;
-    background:#25d366;color:#fff;padding:13px 26px;border-radius:100px;
-    font-weight:700;font-size:14.5px;text-decoration:none;transition:all .2s;
-  }
-  .doctor-cta:hover{background:#1fb85a;transform:translateY(-2px)}
-  .doctor-cta svg{width:19px;height:19px;stroke:currentColor;stroke-width:2;fill:none}
-
-  /* AGENDAMENTO ONLINE */
-  .agendamento{background:var(--bg);position:relative;overflow:hidden}
-  .agendamento::before{content:'';position:absolute;top:-120px;left:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--teal-soft),transparent 70%);z-index:0}
-  .agenda-inner{position:relative;z-index:1;max-width:760px;margin:0 auto}
-  .agenda-widget{
-    margin-top:48px;background:#fff;border:1px solid var(--line);border-radius:24px;
-    box-shadow:0 24px 60px rgba(6,18,54,0.08);overflow:hidden;
-  }
-  .agenda-widget iframe{display:block;width:100%;border:0}
-  .agenda-embed{padding:28px}
-  #zl-url{display:block;text-decoration:none}
-  .agenda-alt{margin-top:20px;text-align:center;font-size:14px;color:var(--muted)}
-  .agenda-alt a{color:var(--teal);font-weight:700;text-decoration:none;margin-left:6px}
-  .agenda-alt a:hover{text-decoration:underline}
-  /* Placeholder mostrado enquanto o widget real não é colado */
-  .agenda-placeholder{
-    padding:56px 32px;text-align:center;
-    background:
-      repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(22,53,127,0.02) 14px, rgba(22,53,127,0.02) 28px),
-      var(--bg-soft);
-  }
-  .agenda-placeholder .ap-icon{
-    width:80px;height:80px;border-radius:22px;margin:0 auto 22px;background:var(--teal-soft);
-    display:flex;align-items:center;justify-content:center;
-  }
-  .agenda-placeholder .ap-icon svg{width:40px;height:40px;stroke:var(--teal);stroke-width:1.6;fill:none}
-  .agenda-placeholder h3{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--ink);font-weight:600;margin-bottom:10px}
-  .agenda-placeholder p{color:var(--muted);font-size:15px;line-height:1.7;max-width:440px;margin:0 auto 26px}
-  .agenda-placeholder .ap-note{
-    display:inline-block;font-size:12.5px;color:var(--teal);background:var(--teal-soft);
-    padding:8px 16px;border-radius:100px;font-weight:600;
-  }
-  .agenda-fallback{
-    display:inline-flex;align-items:center;gap:10px;
-    background:#25d366;color:#fff;padding:14px 28px;border-radius:100px;
-    font-weight:700;font-size:15px;text-decoration:none;transition:all .2s;margin-bottom:18px;
-  }
-  .agenda-fallback:hover{background:#1fb85a;transform:translateY(-2px)}
-  .agenda-fallback svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none}
 
   /* EXAMES */
   .exames{background:var(--ink);color:#fff}
@@ -297,51 +163,22 @@
   .exames .section-tag{color:#8fb0ec}
   .exames .section-tag::before{background:#8fb0ec}
   .exames-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:56px}
-  .exame-card{
-    background:rgba(255,255,255,0.04);
-    border:1px solid rgba(255,255,255,0.08);
-    border-radius:16px;padding:26px 24px;
-    display:flex;flex-direction:column;gap:14px;
-    transition:all .2s;
-  }
+  .exame-card{background:rgba(255,255,255,0.04);border:1px solid rgba(255,255,255,0.08);border-radius:16px;padding:26px 24px;display:flex;flex-direction:column;gap:14px;transition:all .2s}
   .exame-card:hover{background:rgba(255,255,255,0.08);border-color:rgba(124,160,230,0.5);transform:translateY(-3px)}
   .exame-num{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600;color:#8fb0ec;line-height:1}
   .exame-card h4{font-size:15px;font-weight:600;color:#fff;line-height:1.4}
-  .exame-tag{
-    align-self:flex-start;
-    background:rgba(255,255,255,0.1);color:#bcd0f2;
-    font-size:11px;font-weight:700;padding:5px 12px;border-radius:100px;
-    letter-spacing:.5px;text-transform:uppercase;
-  }
+  .exame-tag{align-self:flex-start;background:rgba(255,255,255,0.1);color:#bcd0f2;font-size:11px;font-weight:700;padding:5px 12px;border-radius:100px;letter-spacing:.5px;text-transform:uppercase}
 
-  /* CONVÊNIOS E REEMBOLSO */
+  /* CONVÊNIOS */
   .convenios{background:var(--bg)}
-  .conv-logos{
-    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;margin:48px 0 40px;
-  }
-  .conv-logo{
-    height:96px;border-radius:16px;background:var(--bg-soft);border:1px solid var(--line);
-    display:flex;align-items:center;justify-content:center;
-    color:var(--muted);font-size:13px;font-weight:600;
-    transition:all .25s;position:relative;overflow:hidden;
-  }
-  .conv-logo::before{
-    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
-    background:linear-gradient(100deg,transparent,rgba(255,255,255,0.6),transparent);
-    animation:shimmer 3.5s infinite;
-  }
+  .conv-logos{display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;margin:48px 0 40px}
+  .conv-logo{height:96px;border-radius:16px;background:var(--bg-soft);border:1px solid var(--line);display:flex;align-items:center;justify-content:center;color:var(--muted);font-size:13px;font-weight:600;transition:all .25s;position:relative;overflow:hidden}
+  .conv-logo::before{content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;background:linear-gradient(100deg,transparent,rgba(255,255,255,0.6),transparent);animation:shimmer 3.5s infinite}
   .conv-logo:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);box-shadow:0 12px 30px rgba(6,18,54,0.06)}
   .conv-logo span{position:relative;z-index:1;text-align:center;line-height:1.3}
-  .reembolso-box{
-    background:linear-gradient(135deg,var(--teal),var(--teal-dark));
-    border-radius:24px;padding:40px 44px;color:#fff;
-    display:flex;align-items:center;gap:28px;flex-wrap:wrap;position:relative;overflow:hidden;
-  }
+  .reembolso-box{background:linear-gradient(135deg,var(--teal),var(--teal-dark));border-radius:24px;padding:40px 44px;color:#fff;display:flex;align-items:center;gap:28px;flex-wrap:wrap;position:relative;overflow:hidden}
   .reembolso-box::after{content:'';position:absolute;top:-60px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(143,176,236,0.25),transparent 70%)}
-  .reembolso-icon{
-    width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,0.12);flex-shrink:0;
-    display:flex;align-items:center;justify-content:center;position:relative;z-index:1;
-  }
+  .reembolso-icon{width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,0.12);flex-shrink:0;display:flex;align-items:center;justify-content:center;position:relative;z-index:1}
   .reembolso-icon svg{width:36px;height:36px;stroke:#fff;stroke-width:1.8;fill:none}
   .reembolso-text{position:relative;z-index:1;flex:1;min-width:260px}
   .reembolso-text h3{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;margin-bottom:8px}
@@ -351,23 +188,14 @@
   .contato{background:var(--bg-soft)}
   .contato-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:56px}
   .contato-info{display:flex;flex-direction:column;gap:20px}
-  .info-item{
-    display:flex;align-items:flex-start;gap:18px;
-    background:#fff;border:1px solid var(--line);
-    border-radius:16px;padding:22px 24px;transition:all .2s;
-  }
+  .info-item{display:flex;align-items:flex-start;gap:18px;background:#fff;border:1px solid var(--line);border-radius:16px;padding:22px 24px;transition:all .2s}
   .info-item:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(6,18,54,0.05)}
-  .info-icon{
-    width:48px;height:48px;border-radius:13px;flex-shrink:0;
-    background:var(--teal-soft);
-    display:flex;align-items:center;justify-content:center;
-  }
+  .info-icon{width:48px;height:48px;border-radius:13px;flex-shrink:0;background:var(--teal-soft);display:flex;align-items:center;justify-content:center}
   .info-icon svg{width:22px;height:22px;stroke:var(--teal);stroke-width:1.8;fill:none}
   .info-item strong{display:block;font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
   .info-item span{font-size:15.5px;color:var(--ink);line-height:1.6;font-weight:500}
   .info-item a{color:var(--ink);text-decoration:none;font-weight:600}
   .info-item a:hover{color:var(--teal)}
-
   .cta-box{background:var(--ink);border-radius:24px;padding:44px 40px;position:relative;overflow:hidden}
   .cta-box::after{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(143,176,236,0.2),transparent 70%)}
   .cta-box h3{font-family:'Fraunces',serif;color:#fff;font-size:1.8rem;margin-bottom:14px;font-weight:600;position:relative}
@@ -388,20 +216,10 @@
   .footer-crm{color:var(--muted);font-size:13px;margin-top:4px}
   .footer-copy{color:var(--muted);font-size:13px}
 
-  /* MODAL CAPTAÇÃO */
-  .modal-overlay{
-    position:fixed;inset:0;z-index:1000;
-    background:rgba(6,18,54,0.65);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
-    display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;
-    opacity:0;visibility:hidden;transition:opacity .35s ease;
-  }
+  /* MODAL */
+  .modal-overlay{position:fixed;inset:0;z-index:1000;background:rgba(6,18,54,0.65);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;opacity:0;visibility:hidden;transition:opacity .35s ease}
   .modal-overlay.show{opacity:1;visibility:visible}
-  .modal{
-    background:#fff;border-radius:24px;max-width:440px;width:100%;
-    max-height:92vh;overflow-y:auto;position:relative;
-    transform:scale(0.88) translateY(10px);transition:transform .4s cubic-bezier(.2,.9,.3,1.3);
-    box-shadow:0 30px 90px rgba(6,18,54,0.45);
-  }
+  .modal{background:#fff;border-radius:24px;max-width:440px;width:100%;max-height:92vh;overflow-y:auto;position:relative;transform:scale(0.88) translateY(10px);transition:transform .4s cubic-bezier(.2,.9,.3,1.3);box-shadow:0 30px 90px rgba(6,18,54,0.45)}
   .modal-overlay.show .modal{transform:scale(1) translateY(0)}
   .modal-top{background:var(--ink);padding:34px 32px 30px;text-align:center;position:relative;overflow:hidden}
   .modal-top::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(143,176,236,0.22),transparent 70%)}
@@ -425,35 +243,46 @@
   .modal-dismiss{background:none;border:none;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;margin-top:16px;text-decoration:underline;font-family:inherit}
   .modal-dismiss:hover{color:var(--ink)}
 
-  /* RESPONSIVO */
+  /* ===== RESPONSIVO (PRIORIDADE MOBILE) ===== */
   @media(max-width:900px){
     .nav-toggle{display:flex}
     .nav-right{gap:14px}
-    .nav-links{
-      position:fixed;top:74px;left:0;right:0;
-      background:#fff;border-bottom:1px solid var(--line);
-      flex-direction:column;gap:0;padding:8px 6vw 20px;
-      box-shadow:0 20px 40px rgba(6,18,54,0.08);
-      transform:translateY(-12px);opacity:0;visibility:hidden;
-      transition:transform .3s ease, opacity .3s ease;
-    }
+    .nav-links{position:fixed;top:74px;left:0;right:0;background:#fff;border-bottom:1px solid var(--line);flex-direction:column;gap:0;padding:8px 6vw 20px;box-shadow:0 20px 40px rgba(6,18,54,0.08);transform:translateY(-12px);opacity:0;visibility:hidden;transition:transform .3s ease, opacity .3s ease}
     .nav-links.show{transform:translateY(0);opacity:1;visibility:visible}
     .nav-links li{width:100%;border-bottom:1px solid var(--line)}
     .nav-links li:last-child{border-bottom:none}
     .nav-links a{display:block;padding:15px 4px;font-size:15px}
     .hero-inner,.sobre-inner,.contato-inner{grid-template-columns:1fr;gap:48px}
-    .hero-visual{max-width:420px;margin:0 auto;width:100%}
+    .hero-visual{max-width:380px;margin:0 auto;width:100%}
     .sobre-list{grid-template-columns:1fr}
-    .doctor-card{grid-template-columns:1fr;max-width:440px}
-    .doctor-photo{min-height:300px}
+    .ta-grid{grid-template-columns:1fr;gap:22px}
+    .ta-photo{aspect-ratio:16/10}
   }
   @media(max-width:560px){
+    section{padding:64px 5vw}
+    .hero{padding:118px 5vw 56px}
+    .topo-agenda{padding-top:64px}
+    .hero h1{font-size:2rem}
+    .hero-desc{font-size:15.5px}
+    .hero-actions{flex-direction:column;align-items:stretch}
+    .btn-primary,.btn-outline{width:100%}
+    .hero-trust{gap:22px}
+    .trust-num{font-size:1.6rem}
+    .float-card{display:none}
+    .ta-grid{margin-top:32px}
+    .ta-info{padding:22px 22px 26px}
+    .ta-name{font-size:1.45rem}
+    .ta-agenda-body{padding:16px}
+    .ta-agenda-head{padding:20px 22px}
+    .reembolso-box{padding:28px 24px;gap:18px}
+    .cta-box{padding:34px 26px}
+    .contato-inner{gap:36px}
     .modal-overlay{align-items:flex-start;padding:14px}
     .modal{max-height:none;margin:auto 0}
-    .modal-top{padding:28px 24px 24px}
-    .modal-top h3{font-size:1.3rem}
-    .modal-body{padding:22px 24px 26px}
-    .reembolso-box{padding:30px 26px}
+    .modal-top{padding:26px 22px 22px}
+    .modal-top h3{font-size:1.25rem}
+    .modal-body{padding:20px 22px 24px}
+    .section-title{font-size:1.6rem}
   }
 </style>
 </head>
@@ -467,18 +296,15 @@
   </a>
   <div class="nav-right">
     <ul class="nav-links" id="navLinks">
+      <li><a href="#agendamento">Agende Online</a></li>
       <li><a href="#sobre">Sobre</a></li>
       <li><a href="#especialidades">Especialidades</a></li>
-      <li><a href="#equipe">Equipe</a></li>
-      <li><a href="#agendamento">Agende Online</a></li>
       <li><a href="#exames">Exames</a></li>
       <li><a href="#convenios">Convênios</a></li>
       <li><a href="#contato">Contato</a></li>
     </ul>
-    <a href="https://wa.me/5521996141313" class="nav-cta">Agendar</a>
-    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
-      <span></span><span></span><span></span>
-    </button>
+    <a href="#agendamento" class="nav-cta">Agendar</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu"><span></span><span></span><span></span></button>
   </div>
 </nav>
 
@@ -490,26 +316,21 @@
       <h1>Cuidado especializado para a sua <em>saúde vascular</em></h1>
       <p class="hero-desc">Diagnóstico preciso e tratamento minimamente invasivo em Angiologia e Cirurgia Vascular, com tecnologia moderna e atendimento humanizado no Méier, Rio de Janeiro.</p>
       <div class="hero-actions">
-        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta." class="btn-primary">
-          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-          Falar pelo WhatsApp
+        <a href="#agendamento" class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><rect x="3" y="4" width="18" height="18" rx="2"/><line x1="16" y1="2" x2="16" y2="6"/><line x1="8" y1="2" x2="8" y2="6"/><line x1="3" y1="10" x2="21" y2="10"/></svg>
+          Agendar consulta
         </a>
-        <a href="#especialidades" class="btn-outline">Conheça nossos serviços</a>
+        <a href="#especialidades" class="btn-outline">Nossos serviços</a>
       </div>
       <div class="hero-trust">
-        <div class="trust-item"><span class="trust-num">+20</span><span class="trust-label">Anos de experiência</span></div>
+        <div class="trust-item"><span class="trust-num">+25</span><span class="trust-label">Anos de experiência</span></div>
         <div class="trust-item"><span class="trust-num">3</span><span class="trust-label">Especialidades</span></div>
         <div class="trust-item"><span class="trust-num">100%</span><span class="trust-label">Atendimento dedicado</span></div>
       </div>
     </div>
     <div class="hero-visual">
       <div class="hero-img">
-        <div class="photo-ph">
-          <div class="ph-icon">
-            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="M21 15l-5-5L5 21"/></svg>
-          </div>
-          <div class="ph-label"><strong>Foto do Dr. Hugnei Ferro</strong><span>Espaço reservado para imagem</span></div>
-        </div>
+        <img src="dr-hugnei.jpg" alt="Dr. Hugnei Ferro – Angiologia e Cirurgia Vascular">
       </div>
       <div class="float-card fc1">
         <div class="fc-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
@@ -523,14 +344,58 @@
   </div>
 </section>
 
+<!-- TOPO: AGENDA + MÉDICO (DESTAQUE) -->
+<section class="topo-agenda" id="agendamento">
+  <div class="wrap center">
+    <div class="section-tag">Agende Agora</div>
+    <h2 class="section-title">Marque sua consulta com o especialista</h2>
+    <p class="section-desc">Escolha o melhor dia e horário diretamente pela agenda online do Dr. Hugnei Ferro.</p>
+  </div>
+  <div class="wrap">
+    <div class="ta-grid">
+      <!-- Médico -->
+      <div class="ta-doctor">
+        <div class="ta-photo">
+          <img src="dr-hugnei.jpg" alt="Dr. Hugnei Ferro">
+          <div class="crm-badge">CRM 11.1260-0</div>
+        </div>
+        <div class="ta-info">
+          <div class="ta-role">Diretor Técnico</div>
+          <div class="ta-name">Dr. Hugnei Ferro</div>
+          <p class="ta-bio">Especialista em Angiologia e Cirurgia Vascular, com ampla experiência em diagnóstico por Doppler e procedimentos minimamente invasivos. Atendimento humanizado, do diagnóstico ao tratamento, sempre com foco no bem-estar do paciente.</p>
+          <div class="ta-tags">
+            <span>Angiologia</span>
+            <span>Cirurgia Vascular</span>
+            <span>Ecografia com Doppler</span>
+          </div>
+        </div>
+      </div>
+      <!-- Agenda em destaque -->
+      <div class="ta-agenda">
+        <div class="ta-agenda-head">
+          <h3>Agenda Online</h3>
+          <p>Selecione o horário e confirme em poucos cliques</p>
+        </div>
+        <div class="ta-agenda-body" id="agendamento-widget">
+          <!-- Widget oficial Doctoralia – Dr. Hugnei Ferro -->
+          <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/hugnei-ferro/cirurgiao-vascular-angiologista/duque-de-caxias" rel="nofollow" data-zlw-doctor="hugnei-ferro" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Marque uma consulta</a>
+          <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "//platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
+          <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta." class="ta-whats">
+            <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+            Prefere o WhatsApp? Agende aqui
+          </a>
+        </div>
+      </div>
+    </div>
+  </div>
+</section>
+
 <!-- SOBRE -->
 <section class="sobre" id="sobre">
   <div class="wrap sobre-inner">
     <div class="sobre-img">
       <div class="photo-ph">
-        <div class="ph-icon">
-          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="M21 15l-5-5L5 21"/></svg>
-        </div>
+        <div class="ph-icon"><svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="M21 15l-5-5L5 21"/></svg></div>
         <div class="ph-label"><strong>Foto da Clínica</strong><span>Espaço reservado para imagem</span></div>
       </div>
       <div class="crm-badge">CRM 11.1260-0</div>
@@ -562,88 +427,27 @@
   <div class="wrap esp-grid">
     <div class="esp-card">
       <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
-      <h3>Angiologia</h3>
-      <p>Diagnóstico e tratamento clínico das doenças que afetam artérias, veias e vasos linfáticos.</p>
+      <h3>Angiologia</h3><p>Diagnóstico e tratamento clínico das doenças que afetam artérias, veias e vasos linfáticos.</p>
     </div>
     <div class="esp-card">
       <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
-      <h3>Cirurgia Vascular</h3>
-      <p>Procedimentos cirúrgicos vasculares com técnicas modernas e minimamente invasivas.</p>
+      <h3>Cirurgia Vascular</h3><p>Procedimentos cirúrgicos vasculares com técnicas modernas e minimamente invasivas.</p>
     </div>
     <div class="esp-card">
       <div class="esp-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
-      <h3>Ecografia com Doppler</h3>
-      <p>Ultrassonografia vascular para avaliar o fluxo sanguíneo com alta precisão diagnóstica.</p>
+      <h3>Ecografia com Doppler</h3><p>Ultrassonografia vascular para avaliar o fluxo sanguíneo com alta precisão diagnóstica.</p>
     </div>
     <div class="esp-card">
       <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
-      <h3>Varizes</h3>
-      <p>Avaliação e tratamento de varizes e insuficiência venosa, com foco estético e funcional.</p>
+      <h3>Varizes</h3><p>Avaliação e tratamento de varizes e insuficiência venosa, com foco estético e funcional.</p>
     </div>
     <div class="esp-card">
       <div class="esp-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
-      <h3>Doenças Arteriais</h3>
-      <p>Acompanhamento de arteriosclerose, isquemia e demais doenças arteriais dos membros.</p>
+      <h3>Doenças Arteriais</h3><p>Acompanhamento de arteriosclerose, isquemia e demais doenças arteriais dos membros.</p>
     </div>
     <div class="esp-card">
       <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
-      <h3>Prevenção Vascular</h3>
-      <p>Consultas preventivas para identificar precocemente fatores de risco e doenças vasculares.</p>
-    </div>
-  </div>
-</section>
-
-<!-- EQUIPE -->
-<section class="equipe" id="equipe">
-  <div class="wrap center">
-    <div class="section-tag">Quem Cuida de Você</div>
-    <h2 class="section-title">Direção Médica</h2>
-    <p class="section-desc">Atendimento conduzido pessoalmente por um especialista experiente em saúde vascular.</p>
-  </div>
-  <div class="wrap">
-    <div class="doctor-card">
-      <div class="doctor-photo">
-        <div class="photo-ph">
-          <div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
-          <div class="ph-label"><strong>Foto do Dr. Hugnei</strong><span>Espaço reservado</span></div>
-        </div>
-      </div>
-      <div class="doctor-info">
-        <div class="d-role">Diretor Técnico</div>
-        <h3>Dr. Hugnei Ferro</h3>
-        <span class="d-crm">CRM 11.1260-0</span>
-        <p>Especialista em Angiologia e Cirurgia Vascular, com ampla experiência em diagnóstico por Doppler e procedimentos minimamente invasivos. Atendimento humanizado, do diagnóstico ao tratamento, sempre com foco no bem-estar do paciente.</p>
-        <div class="doctor-tags">
-          <span>Angiologia</span>
-          <span>Cirurgia Vascular</span>
-          <span>Ecografia com Doppler</span>
-        </div>
-        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20com%20o%20Dr.%20Hugnei." class="doctor-cta">
-          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
-          Agendar com o Dr. Hugnei
-        </a>
-      </div>
-    </div>
-  </div>
-</section>
-
-<!-- AGENDAMENTO ONLINE -->
-<section class="agendamento" id="agendamento">
-  <div class="agenda-inner center">
-    <div class="section-tag">Agenda Online</div>
-    <h2 class="section-title">Agende sua consulta online</h2>
-    <p class="section-desc">Escolha o melhor dia e horário diretamente pela agenda do Dr. Hugnei Ferro. Rápido, prático e sem complicação.</p>
-
-    <div class="agenda-widget" id="agendamento-widget">
-      <div class="agenda-embed">
-        <!-- Widget oficial Doctoralia – Dr. Hugnei Ferro -->
-        <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/hugnei-ferro/cirurgiao-vascular-angiologista/duque-de-caxias" rel="nofollow" data-zlw-doctor="hugnei-ferro" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Marque uma consulta</a>
-        <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "//platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
-        <div class="agenda-alt">
-          Prefere falar direto?
-          <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta.">Agendar pelo WhatsApp</a>
-        </div>
-      </div>
+      <h3>Prevenção Vascular</h3><p>Consultas preventivas para identificar precocemente fatores de risco e doenças vasculares.</p>
     </div>
   </div>
 </section>
@@ -667,7 +471,7 @@
   </div>
 </section>
 
-<!-- CONVÊNIOS E REEMBOLSO -->
+<!-- CONVÊNIOS -->
 <section class="convenios" id="convenios">
   <div class="wrap center">
     <div class="section-tag">Pagamento e Planos</div>
@@ -684,9 +488,7 @@
       <div class="conv-logo"><span>Logo<br>Plano de Saúde</span></div>
     </div>
     <div class="reembolso-box">
-      <div class="reembolso-icon">
-        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
-      </div>
+      <div class="reembolso-icon"><svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="13" y2="11"/></svg></div>
       <div class="reembolso-text">
         <h3>Atendimento particular com reembolso</h3>
         <p>Atendemos consultas particulares com emissão de recibo para solicitar reembolso junto ao seu plano de saúde. Entre em contato para verificar valores e como solicitar o reembolso no seu convênio.</p>
@@ -754,9 +556,7 @@
   <div class="modal">
     <button class="modal-close" id="modalClose" aria-label="Fechar">&times;</button>
     <div class="modal-top">
-      <div class="modal-badge">
-        <svg viewBox="0 0 24 24"><path d="M21 8.5a6 6 0 00-11.5-2.3A6 6 0 003 8.5c0 4.5 9 11 9 11s9-6.5 9-11z"/></svg>
-      </div>
+      <div class="modal-badge"><svg viewBox="0 0 24 24"><path d="M21 8.5a6 6 0 00-11.5-2.3A6 6 0 003 8.5c0 4.5 9 11 9 11s9-6.5 9-11z"/></svg></div>
       <h3>Agende sua consulta</h3>
       <p>Cuide da sua saúde vascular com atendimento especializado no Méier. Fale agora e marque seu horário.</p>
     </div>
@@ -782,7 +582,7 @@
 </div>
 
 <script>
-/* ===== SCROLL SUAVE ===== */
+/* SCROLL SUAVE */
 document.querySelectorAll('a[href^="#"]').forEach(a=>{
   a.addEventListener('click',e=>{
     const t=document.querySelector(a.getAttribute('href'));
@@ -790,52 +590,32 @@ document.querySelectorAll('a[href^="#"]').forEach(a=>{
   });
 });
 
-/* ===== MENU HAMBÚRGUER (MOBILE) ===== */
+/* MENU HAMBÚRGUER */
 const navToggle = document.getElementById('navToggle');
 const navLinks  = document.getElementById('navLinks');
-navToggle.addEventListener('click', ()=>{
-  navToggle.classList.toggle('open');
-  navLinks.classList.toggle('show');
-});
-/* fecha o menu ao clicar em um link */
-navLinks.querySelectorAll('a').forEach(a=>{
-  a.addEventListener('click', ()=>{
-    navToggle.classList.remove('open');
-    navLinks.classList.remove('show');
-  });
-});
+navToggle.addEventListener('click', ()=>{ navToggle.classList.toggle('open'); navLinks.classList.toggle('show'); });
+navLinks.querySelectorAll('a').forEach(a=>{ a.addEventListener('click', ()=>{ navToggle.classList.remove('open'); navLinks.classList.remove('show'); }); });
 
-/* ===== MODAL DE CAPTAÇÃO ===== */
-/* Aparece após 15s na página OU ao rolar 50% — apenas uma vez por sessão */
-const TEMPO_PARA_ABRIR = 15000;  /* 15 segundos */
-const ROLAGEM_PARA_ABRIR = 0.5;  /* 50% da página */
-
+/* MODAL: 15s OU 50% de rolagem, uma vez por sessão */
+const TEMPO_PARA_ABRIR = 15000;
+const ROLAGEM_PARA_ABRIR = 0.5;
 const modal     = document.getElementById('agendaModal');
 const btnClose  = document.getElementById('modalClose');
 const btnDismiss= document.getElementById('modalDismiss');
 const btnWhats  = document.getElementById('modalWhats');
 let modalMostrado = false;
-
 function abrirModal(){
   if(modalMostrado) return;
-  modal.classList.add('show');
-  modalMostrado = true;
-  clearTimeout(timerAbrir);
-  window.removeEventListener('scroll', onScroll);
+  modal.classList.add('show'); modalMostrado = true;
+  clearTimeout(timerAbrir); window.removeEventListener('scroll', onScroll);
 }
 function fecharModal(){ modal.classList.remove('show'); }
-
-/* gatilho por tempo */
 const timerAbrir = setTimeout(abrirModal, TEMPO_PARA_ABRIR);
-
-/* gatilho por rolagem (50% da página) */
 function onScroll(){
   const total = document.body.scrollHeight - window.innerHeight;
   if(total > 0 && (window.scrollY / total) >= ROLAGEM_PARA_ABRIR) abrirModal();
 }
 window.addEventListener('scroll', onScroll, {passive:true});
-
-/* fechar */
 btnClose.addEventListener('click', fecharModal);
 btnDismiss.addEventListener('click', fecharModal);
 modal.addEventListener('click', e=>{ if(e.target===modal) fecharModal(); });
