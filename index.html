@@ -1,983 +1,845 @@
-<!-- COPASULMED — Ficha Digital do Paciente v2.0 -->
 <!DOCTYPE html>
 <html lang="pt-BR">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, shrink-to-fit=no">
-<title>Copasulmed — Ficha do Paciente v2</title>
-<script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
-<link rel="preconnect" href="https://fonts.googleapis.com">
-<link href="https://fonts.googleapis.com/css2?family=Lato:wght@300;400;700;900&family=Merriweather:ital,wght@0,400;0,700;1,400&family=Playfair+Display:ital,wght@0,400;0,600;0,700;1,400;1,600&display=swap" rel="stylesheet">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>C.T.D.M.I. – Angiologia e Cirurgia Vascular</title>
+<link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=Fraunces:opsz,wght@9..144,400;9..144,500;9..144,600&family=Pinyon+Script&display=swap" rel="stylesheet">
 <style>
-:root {
-  --green:#1a6b3a;--green-mid:#2d8a50;--green-light:#4caf72;--green-pale:#e8f5ee;
-  --green-dim:rgba(26,107,58,0.08);--white:#ffffff;--off-white:#f7f9f8;
-  --border:#d4e3da;--border-dark:#b0c9bc;--text:#1a2e23;--text-mid:#3d5a47;
-  --text-muted:#7a9986;--red:#c0392b;--amber:#d4850a;--blue:#1a6b9a;
-  --shadow-sm:0 1px 4px rgba(26,107,58,0.08);--shadow:0 4px 16px rgba(26,107,58,0.1);
-  --shadow-lg:0 8px 32px rgba(26,107,58,0.15);--radius:10px;
-}
-*{box-sizing:border-box;margin:0;padding:0;}
-body{background:var(--off-white);color:var(--text);font-family:'Lato',sans-serif;font-size:14px;min-height:100vh;}
-#toast{position:fixed;bottom:24px;right:24px;z-index:9999;background:var(--white);border:1px solid var(--border-dark);border-radius:var(--radius);padding:13px 18px;font-size:13px;display:none;align-items:center;gap:10px;box-shadow:var(--shadow-lg);max-width:320px;color:var(--text);}
-#toast.show{display:flex;}#toast.ok{border-left:4px solid #27ae60;}#toast.err{border-left:4px solid var(--red);}#toast.inf{border-left:4px solid var(--green-mid);}
-#overlay{position:fixed;inset:0;background:rgba(247,249,248,0.85);display:none;align-items:center;justify-content:center;z-index:9998;flex-direction:column;gap:14px;}
-#overlay.show{display:flex;}.spinner{width:40px;height:40px;border:3px solid var(--border);border-top-color:var(--green-mid);border-radius:50%;animation:spin 0.8s linear infinite;}
-@keyframes spin{to{transform:rotate(360deg);}}#overlay p{color:var(--text-muted);font-size:13px;}
-.screen{display:none!important;}.screen.active{display:block!important;}
-#screen-login.active{display:flex!important;min-height:100vh;align-items:center;justify-content:center;}
-.login-bg{width:100vw;min-height:100vh;position:relative;overflow:hidden;background:linear-gradient(160deg,#020d1a 0%,#051525 50%,#020c18 100%);display:flex;align-items:center;justify-content:center;}
-.login-bg::before{content:'';position:absolute;inset:0;background:linear-gradient(160deg,rgba(3,13,26,0.78) 0%,rgba(5,21,37,0.72) 50%,rgba(2,12,24,0.78) 100%);}
-.ecg-line{position:absolute;bottom:25%;left:0;width:100%;height:120px;opacity:0.5;}
-.login-center{position:relative;z-index:10;width:100%;display:flex;justify-content:center;padding:24px;}
-.login-card{background:rgba(3,15,32,0.88);border:1px solid rgba(0,212,255,0.3);border-radius:16px;width:100%;max-width:440px;box-shadow:0 0 40px rgba(0,180,255,0.15),0 20px 60px rgba(0,0,0,0.6);}
-.lc-header{background:linear-gradient(135deg,rgba(5,30,62,0.95) 0%,rgba(10,45,82,0.95) 50%,rgba(5,30,62,0.95) 100%);border-bottom:2px solid rgba(0,212,255,0.3);padding:28px 32px 22px;text-align:center;}
-.lc-logo-wrap{position:relative;width:52px;height:52px;margin:0 auto 14px;display:flex;align-items:center;justify-content:center;}
-.lc-pulse{position:absolute;inset:0;border:2px solid rgba(0,212,255,0.5);border-radius:50%;animation:pulse-ring 2s ease-out infinite;}
-@keyframes pulse-ring{0%{transform:scale(1);opacity:0.8}100%{transform:scale(1.8);opacity:0}}
-.lc-logo-icon{font-size:28px;position:relative;z-index:1;}
-.lc-brand{font-family:'Merriweather',serif;font-size:26px;font-weight:700;color:#fff;letter-spacing:3px;text-shadow:0 0 20px rgba(0,212,255,0.5);}
-.lc-brand-sub{font-size:11px;font-weight:700;color:#f0c040;letter-spacing:2px;margin-top:6px;text-transform:uppercase;}
-.lc-brand-detail{font-size:10px;color:rgba(160,200,220,0.7);margin-top:5px;}
-.lc-form{padding:24px 32px 28px;}
-.lc-form-title{font-size:13px;color:#a0c8d8;text-align:center;margin-bottom:20px;letter-spacing:1px;text-transform:uppercase;}
-.lc-input{width:100%;background:rgba(0,30,60,0.8)!important;border:1px solid rgba(0,212,255,0.25)!important;border-radius:8px;padding:12px 14px;font-size:14px;color:#e0f0ff!important;font-family:'Lato',sans-serif;transition:border-color 0.2s;margin-bottom:14px;}
-.lc-input::placeholder{color:rgba(120,160,200,0.5)!important;}
-.lc-input:focus{outline:none;border-color:rgba(0,212,255,0.7)!important;box-shadow:0 0 0 3px rgba(0,212,255,0.12)!important;}
-.lc-btn{width:100%;padding:13px;border:none;border-radius:8px;cursor:pointer;background:linear-gradient(135deg,#0a7a4a,#0d9b5e);color:#fff;font-size:14px;font-weight:700;font-family:'Lato',sans-serif;box-shadow:0 4px 15px rgba(0,180,100,0.3);transition:transform 0.15s;}
-.lc-btn:hover{transform:translateY(-1px);}
-.navbar{background:var(--green);padding:0 24px;height:56px;display:flex;align-items:center;justify-content:space-between;box-shadow:0 2px 8px rgba(0,0,0,0.15);position:sticky;top:0;z-index:100;}
-.nav-brand{display:flex;align-items:center;gap:12px;}
-.nav-brand-name{font-family:'Merriweather',serif;font-size:18px;font-weight:700;color:#fff;letter-spacing:1px;}
-.nav-brand-sub{font-size:10px;color:rgba(255,255,255,0.65);letter-spacing:1.5px;text-transform:uppercase;}
-.nav-right{display:flex;align-items:center;gap:10px;}
-.nav-avatar{width:32px;height:32px;border-radius:50%;background:rgba(255,255,255,0.2);display:flex;align-items:center;justify-content:center;font-size:13px;font-weight:700;color:#fff;}
-.main-layout{display:flex;min-height:calc(100vh - 56px);}
-.sidebar{width:240px;flex-shrink:0;background:var(--white);border-right:1px solid var(--border);padding:16px 12px;display:flex;flex-direction:column;gap:4px;position:sticky;top:56px;height:calc(100vh - 56px);overflow-y:auto;}
-.sidebar-section{font-size:10px;font-weight:700;color:var(--text-muted);letter-spacing:1.5px;text-transform:uppercase;padding:10px 8px 4px;}
-.sidebar-btn{display:flex;align-items:center;gap:10px;padding:9px 12px;border-radius:8px;cursor:pointer;border:none;background:transparent;width:100%;text-align:left;font-family:'Lato',sans-serif;font-size:13px;color:var(--text-mid);transition:background 0.15s;}
-.sidebar-btn:hover{background:var(--green-pale);}
-.sidebar-btn.active{background:var(--green-pale);color:var(--green);font-weight:700;}
-.sidebar-btn .sb-icon{width:18px;text-align:center;font-size:15px;}
-.sidebar-count{margin-left:auto;background:var(--green-pale);color:var(--green);font-size:10px;font-weight:700;padding:2px 7px;border-radius:20px;}
-.content-area{flex:1;padding:24px;overflow-y:auto;}
-.btn{display:inline-flex;align-items:center;justify-content:center;gap:6px;padding:9px 18px;border-radius:8px;cursor:pointer;border:none;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;transition:all 0.15s;}
-.btn-green{background:var(--green);color:#fff;}.btn-green:hover{background:var(--green-mid);}
-.btn-outline{background:transparent;border:1.5px solid var(--border-dark);color:var(--text-mid);}.btn-outline:hover{background:var(--green-dim);}
-.btn-red{background:var(--red);color:#fff;}.btn-red:hover{filter:brightness(0.9);}
-.btn-blue{background:var(--blue);color:#fff;}.btn-blue:hover{filter:brightness(1.1);}
-.btn-sm{padding:6px 12px;font-size:12px;}
-.page-header{display:flex;align-items:center;justify-content:space-between;margin-bottom:20px;gap:12px;flex-wrap:wrap;}
-.page-title{font-size:20px;font-weight:900;color:var(--text);}
-.page-title span{color:var(--green);}
-.search-bar{display:flex;align-items:center;gap:8px;background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:8px 14px;flex:1;max-width:380px;box-shadow:var(--shadow-sm);}
-.search-bar input{border:none;outline:none;font-family:'Lato',sans-serif;font-size:13px;color:var(--text);background:transparent;width:100%;}
-.search-bar input::placeholder{color:var(--text-muted);}
-.stats-row{display:flex;gap:12px;margin-bottom:20px;flex-wrap:wrap;}
-.stat-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:14px 18px;flex:1;min-width:120px;box-shadow:var(--shadow-sm);}
-.stat-val{font-size:28px;font-weight:900;color:var(--green);}
-.stat-lbl{font-size:11px;color:var(--text-muted);text-transform:uppercase;letter-spacing:0.5px;margin-top:2px;}
-.patient-grid{display:flex;flex-direction:column;gap:10px;}
-.patient-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 18px;cursor:pointer;transition:all 0.18s;display:flex;align-items:center;gap:16px;box-shadow:var(--shadow-sm);}
-.patient-card:hover{border-color:var(--green-mid);box-shadow:var(--shadow);}
-.patient-avatar{width:46px;height:46px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:var(--green);flex-shrink:0;}
-.patient-info{flex:1;min-width:0;}
-.patient-name{font-size:15px;font-weight:800;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.patient-meta{font-size:12px;color:var(--text-muted);margin-top:3px;display:flex;gap:14px;flex-wrap:wrap;}
-.patient-tags{display:flex;gap:6px;flex-wrap:wrap;margin-top:6px;}
-.tag{font-size:10px;font-weight:700;padding:2px 8px;border-radius:20px;text-transform:uppercase;letter-spacing:0.5px;}
-.tag-green{background:var(--green-pale);color:var(--green);}
-.tag-amber{background:#fff8e6;color:var(--amber);}
-.tag-blue{background:#e8f0ff;color:var(--blue);}
-.tag-red{background:#fff0ee;color:var(--red);}
-.ficha-header{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:20px 24px;margin-bottom:16px;box-shadow:var(--shadow-sm);display:flex;align-items:flex-start;gap:20px;}
-.ficha-avatar-big{width:72px;height:72px;border-radius:50%;background:var(--green-pale);display:flex;align-items:center;justify-content:center;font-size:28px;font-weight:900;color:var(--green);flex-shrink:0;}
-.ficha-name{font-size:22px;font-weight:900;color:var(--text);}
-.ficha-meta-row{display:flex;gap:20px;flex-wrap:wrap;margin-top:6px;font-size:13px;color:var(--text-mid);}
-.ficha-actions{display:flex;gap:8px;flex-wrap:wrap;margin-top:12px;}
-.tabs{display:flex;gap:0;border-bottom:2px solid var(--border);margin-bottom:20px;overflow-x:auto;}
-.tab-btn{padding:10px 18px;border:none;background:transparent;cursor:pointer;font-family:'Lato',sans-serif;font-size:13px;font-weight:700;color:var(--text-muted);border-bottom:2px solid transparent;margin-bottom:-2px;white-space:nowrap;transition:all 0.15s;display:flex;align-items:center;gap:6px;}
-.tab-btn:hover{color:var(--green);}
-.tab-btn.active{color:var(--green);border-bottom-color:var(--green);}
-.tab-badge{background:var(--green-pale);color:var(--green);font-size:10px;font-weight:700;padding:1px 6px;border-radius:10px;}
-.section-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:0;margin-bottom:16px;box-shadow:var(--shadow-sm);overflow:hidden;}
-.section-card-hdr{padding:14px 18px;border-bottom:1px solid var(--border);display:flex;align-items:center;justify-content:space-between;background:var(--off-white);}
-.section-card-title{font-size:13px;font-weight:800;color:var(--text);}
-.section-card-body{padding:18px;}
-.form-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(220px,1fr));gap:12px 16px;}
-.form-grid-2{grid-template-columns:repeat(2,1fr);}
-.form-group{display:flex;flex-direction:column;gap:4px;}
-.form-group.full{grid-column:1/-1;}
-.form-label{font-size:11px;font-weight:700;text-transform:uppercase;color:var(--text-muted);letter-spacing:0.5px;}
-.form-input{padding:9px 12px;border:1.5px solid var(--border);border-radius:8px;font-family:'Lato',sans-serif;font-size:13px;color:var(--text);background:var(--white);transition:border-color 0.2s,box-shadow 0.2s;}
-.form-input:focus{outline:none;border-color:var(--green-mid);box-shadow:0 0 0 3px rgba(26,107,58,0.08);}
-.form-input[readonly]{background:var(--off-white);color:var(--text-muted);}
-textarea.form-input{resize:vertical;min-height:100px;}
-select.form-input{cursor:pointer;}
-.anam-entry{border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;transition:border-color 0.2s;cursor:pointer;}
-.anam-entry:hover{border-color:var(--green-mid);}
-.anam-entry-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:var(--off-white);border-bottom:1px solid var(--border);}
-.anam-entry-date{font-size:13px;font-weight:800;color:var(--green);}
-.anam-entry-preview{font-size:12px;color:var(--text-mid);padding:10px 16px;line-height:1.5;}
-.receita-entry{border:1.5px solid var(--border);border-radius:var(--radius);margin-bottom:14px;overflow:hidden;cursor:pointer;transition:border-color 0.2s;}
-.receita-entry:hover{border-color:var(--blue);}
-.receita-entry-hdr{display:flex;align-items:center;justify-content:space-between;padding:12px 16px;background:#f0f4ff;border-bottom:1px solid #dce5ff;}
-.receita-entry-date{font-size:13px;font-weight:800;color:var(--blue);}
-.img-grid{display:grid;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));gap:12px;}
-.img-card{border:1.5px solid var(--border);border-radius:var(--radius);overflow:hidden;cursor:pointer;transition:all 0.18s;background:var(--white);box-shadow:var(--shadow-sm);}
-.img-card:hover{border-color:var(--green-mid);box-shadow:var(--shadow);transform:translateY(-2px);}
-.img-card img{width:100%;height:120px;object-fit:cover;display:block;}
-.img-card-info{padding:8px 10px;}
-.img-card-name{font-size:11px;font-weight:700;color:var(--text);white-space:nowrap;overflow:hidden;text-overflow:ellipsis;}
-.img-card-date{font-size:10px;color:var(--text-muted);margin-top:2px;}
-.upload-zone{border:2px dashed var(--border-dark);border-radius:var(--radius);padding:32px;text-align:center;cursor:pointer;transition:all 0.18s;color:var(--text-muted);background:var(--off-white);}
-.upload-zone:hover{border-color:var(--green-mid);background:var(--green-pale);color:var(--green);}
-.upload-zone .upload-icon{font-size:32px;margin-bottom:8px;}
-.modal-bg{position:fixed;inset:0;background:rgba(0,0,0,0.4);z-index:2000;display:flex;align-items:center;justify-content:center;padding:16px;}
-.modal{background:var(--white);border-radius:14px;box-shadow:var(--shadow-lg);width:100%;max-width:640px;max-height:90vh;overflow-y:auto;}
-.modal-hdr{display:flex;align-items:center;justify-content:space-between;padding:16px 20px;border-bottom:1px solid var(--border);position:sticky;top:0;background:var(--white);z-index:5;}
-.modal-close{background:transparent;border:none;font-size:18px;cursor:pointer;color:var(--text-muted);padding:4px 8px;border-radius:6px;}
-.modal-close:hover{background:var(--off-white);}
-.modal-body{padding:20px;}
-.modal-footer{padding:14px 20px;border-top:1px solid var(--border);display:flex;gap:10px;justify-content:flex-end;}
-#lightbox{display:none;position:fixed;inset:0;background:rgba(0,0,0,0.9);z-index:5000;align-items:center;justify-content:center;}
-#lightbox.show{display:flex;}
-#lightbox img{max-width:90vw;max-height:90vh;border-radius:8px;}
-#lightbox-close{position:absolute;top:20px;right:20px;background:rgba(255,255,255,0.15);border:none;color:#fff;font-size:24px;cursor:pointer;width:40px;height:40px;border-radius:50%;display:flex;align-items:center;justify-content:center;}
-.empty-state{text-align:center;padding:48px 24px;color:var(--text-muted);}
-.empty-state .empty-icon{font-size:48px;margin-bottom:12px;opacity:0.4;}
-.empty-state p{font-size:14px;font-weight:700;margin-bottom:6px;color:var(--text-mid);}
-.empty-state small{font-size:12px;}
-.alert-tag{display:inline-flex;align-items:center;gap:6px;padding:5px 12px;border-radius:20px;font-size:12px;font-weight:700;margin:3px;}
-.alert-red{background:#fff0ee;color:var(--red);border:1px solid #f5c0bb;}
-.alert-amber{background:#fff8e6;color:var(--amber);border:1px solid #f5dfa0;}
-.medico-card{background:var(--white);border:1.5px solid var(--border);border-radius:var(--radius);padding:16px 18px;display:flex;align-items:center;gap:16px;margin-bottom:10px;box-shadow:var(--shadow-sm);}
-.medico-avatar{width:46px;height:46px;border-radius:50%;background:#e8f0ff;display:flex;align-items:center;justify-content:center;font-size:18px;font-weight:900;color:var(--blue);flex-shrink:0;}
+  *{margin:0;padding:0;box-sizing:border-box}
+  :root{
+    --ink:#061236;
+    --teal:#16357f;
+    --teal-dark:#0d2156;
+    --teal-soft:#e7ecf7;
+    --gold:#e3a92c;
+    --gold-soft:#fbf3e0;
+    --muted:#566183;
+    --line:#e4e8f1;
+    --bg:#ffffff;
+    --bg-soft:#f5f7fc;
+  }
+  html{scroll-behavior:smooth}
+  body{font-family:'Plus Jakarta Sans',sans-serif;color:var(--ink);background:var(--bg);line-height:1.6}
 
-/* ══ PRINT ══ */
-@media print {
-  body * { visibility: hidden; }
-  #print-area, #print-area * { visibility: visible; }
-  #print-area {
-    position:fixed;inset:0;background:white;
-    padding:48px 56px 120px 56px;
-    font-family:'Lato',sans-serif;font-size:13px;color:#111;
-    display:flex;flex-direction:column;
+  /* NAV */
+  nav{
+    position:fixed;top:0;left:0;right:0;z-index:100;
+    background:rgba(255,255,255,0.88);
+    -webkit-backdrop-filter:blur(12px);backdrop-filter:blur(12px);
+    display:flex;align-items:center;justify-content:space-between;
+    padding:0 6vw;height:74px;
+    border-bottom:1px solid var(--line);
   }
-  /* ── CABEÇALHO ── */
-  .ph {
-    text-align:center;
-    border-bottom:1.5px solid #1a6b3a;
-    padding-bottom:18px;margin-bottom:24px;
+  .nav-logo{display:flex;flex-direction:column;text-decoration:none;line-height:1.15}
+  .nav-logo-text{color:var(--ink);font-size:20px;font-weight:800;letter-spacing:1px}
+  .nav-logo-sub{color:var(--teal);font-size:10px;font-weight:600;letter-spacing:1.5px;text-transform:uppercase}
+  .nav-right{display:flex;align-items:center;gap:28px}
+  .nav-links{display:flex;gap:34px;list-style:none}
+  .nav-links a{color:var(--muted);text-decoration:none;font-size:14px;font-weight:600;transition:color .2s}
+  .nav-links a:hover{color:var(--teal)}
+  .nav-cta{
+    background:var(--teal);color:#fff;
+    border:none;padding:11px 22px;border-radius:100px;
+    font-size:13px;font-weight:700;cursor:pointer;text-decoration:none;
+    transition:all .2s;white-space:nowrap;
   }
-  .ph h1 {
-    font-family:'Playfair Display',Georgia,serif;
-    font-size:26px;font-weight:700;font-style:italic;
-    color:#1a2e23;margin-bottom:5px;letter-spacing:0.5px;
+  .nav-cta:hover{background:var(--teal-dark);transform:translateY(-1px)}
+  /* Hamburger */
+  .nav-toggle{
+    display:none;flex-direction:column;justify-content:center;gap:5px;
+    width:42px;height:42px;border:none;background:var(--teal-soft);border-radius:11px;
+    cursor:pointer;padding:0;transition:background .2s;
   }
-  .ph .ph-crm {
-    font-family:'Lato',sans-serif;
-    font-size:12px;color:#555;margin:3px 0;letter-spacing:0.3px;
+  .nav-toggle:hover{background:#dde4f4}
+  .nav-toggle span{
+    display:block;width:18px;height:2px;background:var(--teal-dark);border-radius:2px;
+    margin:0 auto;transition:transform .3s ease,opacity .25s ease;
   }
-  .ph .ph-esp {
-    font-family:'Playfair Display',Georgia,serif;
-    font-size:13px;font-style:italic;color:#3d5a47;margin:2px 0;
+  .nav-toggle.open span:nth-child(1){transform:translateY(7px) rotate(45deg)}
+  .nav-toggle.open span:nth-child(2){opacity:0}
+  .nav-toggle.open span:nth-child(3){transform:translateY(-7px) rotate(-45deg)}
+
+  /* HERO */
+  .hero{
+    padding:150px 6vw 100px;
+    background:linear-gradient(180deg,var(--bg-soft) 0%, #fff 100%);
+    position:relative;overflow:hidden;
   }
-  /* ── PACIENTE ── */
-  .pp {
-    background:#f7f9f8;border:1px solid #d4e3da;
-    border-radius:6px;padding:12px 16px;margin-bottom:22px;
+  .hero::after{
+    content:'';position:absolute;top:-100px;right:-120px;
+    width:520px;height:520px;border-radius:50%;
+    background:radial-gradient(circle, var(--teal-soft) 0%, transparent 70%);
+    z-index:0;
   }
-  .pp h3 { font-size:14px;font-weight:800;margin-bottom:3px;color:#1a2e23; }
-  .pp span { font-size:12px;color:#555; }
-  /* ── PRESCRIÇÃO ── */
-  .pm { flex:1; }
-  .pm-title {
-    font-size:11px;font-weight:700;letter-spacing:1.5px;
-    text-transform:uppercase;color:#1a6b3a;
-    margin-bottom:12px;padding-bottom:6px;
-    border-bottom:1px solid #d4e3da;
+  .hero-inner{
+    position:relative;z-index:1;
+    display:grid;grid-template-columns:1.1fr 0.9fr;gap:60px;align-items:center;
+    max-width:1240px;margin:0 auto;
   }
-  .pm-item {
-    display:flex;align-items:baseline;gap:0;
-    padding:10px 0;border-bottom:1px dashed #d4e3da;
-    font-size:13px;
+  .hero-eyebrow{
+    display:inline-flex;align-items:center;gap:8px;
+    background:#fff;border:1px solid var(--line);
+    color:var(--teal);font-size:12px;font-weight:700;letter-spacing:.8px;text-transform:uppercase;
+    padding:7px 16px;border-radius:100px;margin-bottom:24px;
+    box-shadow:0 2px 12px rgba(6,18,54,0.05);
   }
-  .pm-num {
-    font-weight:700;color:#1a6b3a;
-    min-width:24px;font-size:13px;
+  .hero-eyebrow::before{content:'';width:7px;height:7px;border-radius:50%;background:var(--teal);display:inline-block}
+  .hero h1{
+    font-family:'Fraunces',serif;
+    font-size:clamp(2.4rem,4.5vw,3.7rem);
+    color:var(--ink);line-height:1.1;margin-bottom:20px;font-weight:600;
+    letter-spacing:-.5px;
   }
-  .pm-med {
-    font-weight:700;color:#1a2e23;font-size:14px;
+  .hero h1 em{color:var(--teal);font-style:normal}
+  .hero-desc{
+    color:var(--muted);font-size:17px;line-height:1.75;
+    margin-bottom:36px;max-width:480px;
   }
-  .pm-posologia {
-    color:#444;font-size:13px;margin-left:8px;
+  .hero-actions{display:flex;gap:14px;flex-wrap:wrap;margin-bottom:40px}
+  .btn-primary{
+    background:var(--teal);color:#fff;
+    padding:15px 30px;border-radius:100px;
+    font-weight:700;font-size:15px;text-decoration:none;
+    transition:all .2s;
+    display:inline-flex;align-items:center;gap:10px;
+    box-shadow:0 8px 24px rgba(22,53,127,0.28);
   }
-  .pobs {
-    margin-top:14px;font-size:12px;color:#555;
-    font-style:italic;padding:10px 14px;
-    background:#f7f9f8;border-left:3px solid #1a6b3a;
-    border-radius:0 6px 6px 0;
+  .btn-primary:hover{background:var(--teal-dark);transform:translateY(-2px)}
+  .btn-outline{
+    background:#fff;border:1.5px solid var(--line);color:var(--ink);
+    padding:15px 30px;border-radius:100px;
+    font-weight:600;font-size:15px;text-decoration:none;
+    transition:all .2s;
+    display:inline-flex;align-items:center;gap:8px;
   }
-  /* ── ASSINATURA — fixada na base ── */
-  .psign {
-    position:fixed;bottom:80px;left:0;right:0;
-    text-align:center;
+  .btn-outline:hover{border-color:var(--teal);color:var(--teal)}
+  .hero-trust{display:flex;gap:30px;flex-wrap:wrap}
+  .trust-item{display:flex;flex-direction:column}
+  .trust-num{font-family:'Fraunces',serif;font-size:1.9rem;font-weight:600;color:var(--ink);line-height:1}
+  .trust-label{font-size:13px;color:var(--muted);margin-top:4px;font-weight:500}
+
+  /* HERO VISUAL */
+  .hero-visual{position:relative}
+  .hero-img{aspect-ratio:4/5}
+
+  /* Placeholder de foto moderno */
+  .photo-ph{
+    border-radius:28px;overflow:hidden;position:relative;width:100%;height:100%;
+    background:
+      linear-gradient(135deg, rgba(22,53,127,0.06), rgba(22,53,127,0.02)),
+      repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(22,53,127,0.025) 14px, rgba(22,53,127,0.025) 28px),
+      var(--teal-soft);
+    border:1.5px dashed rgba(22,53,127,0.25);
+    display:flex;flex-direction:column;align-items:center;justify-content:center;gap:16px;text-align:center;padding:24px;
   }
-  .psign .sl {
-    border-top:1px solid #333;width:240px;
-    margin:0 auto 7px;
+  .photo-ph::before{
+    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,0.5),transparent);
+    animation:shimmer 3.2s infinite;
   }
-  .psign .ps-nome {
-    font-family:'Playfair Display',Georgia,serif;
-    font-size:13px;font-style:italic;color:#1a2e23;
+  @keyframes shimmer{0%{left:-60%}60%,100%{left:120%}}
+  .photo-ph .ph-icon{
+    width:78px;height:78px;border-radius:22px;background:#fff;
+    display:flex;align-items:center;justify-content:center;
+    box-shadow:0 10px 30px rgba(6,18,54,0.1);position:relative;z-index:1;
   }
-  .psign .ps-crm {
-    font-size:11px;color:#666;margin-top:2px;letter-spacing:0.3px;
+  .photo-ph .ph-icon svg{width:38px;height:38px;stroke:var(--teal);stroke-width:1.6;fill:none}
+  .photo-ph .ph-label{position:relative;z-index:1}
+  .photo-ph .ph-label strong{display:block;font-size:15px;font-weight:700;color:var(--teal-dark)}
+  .photo-ph .ph-label span{font-size:12.5px;color:var(--muted)}
+
+  .float-card{
+    position:absolute;background:#fff;border-radius:16px;
+    padding:16px 18px;box-shadow:0 12px 40px rgba(6,18,54,0.12);
+    display:flex;align-items:center;gap:12px;z-index:2;
   }
-  /* ── RODAPÉ ── */
-  .pfoot {
-    position:fixed;bottom:32px;left:56px;right:56px;
-    border-top:1px solid #d4e3da;padding-top:8px;
-    font-size:10px;color:#888;
-    display:flex;justify-content:space-between;
+  .float-card.fc1{bottom:30px;left:-30px}
+  .float-card.fc2{top:40px;right:-24px}
+  .fc-icon{width:40px;height:40px;border-radius:10px;background:var(--teal-soft);display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .fc-icon svg{width:20px;height:20px;stroke:var(--teal-dark);stroke-width:2;fill:none}
+  .fc-icon.gold{background:var(--gold-soft)}
+  .fc-icon.gold svg{stroke:var(--gold)}
+  .fc-text strong{display:block;font-size:13px;font-weight:700;color:var(--ink)}
+  .fc-text span{font-size:11px;color:var(--muted)}
+
+  /* SECTIONS */
+  section{padding:100px 6vw}
+  .wrap{max-width:1240px;margin:0 auto}
+  .section-tag{
+    display:inline-flex;align-items:center;gap:8px;
+    color:var(--teal);font-size:12px;font-weight:700;letter-spacing:1px;
+    text-transform:uppercase;margin-bottom:14px;
   }
-}
-::-webkit-scrollbar{width:6px;height:6px;}
-::-webkit-scrollbar-track{background:var(--off-white);}
-::-webkit-scrollbar-thumb{background:var(--border-dark);border-radius:3px;}
+  .section-tag::before{content:'';width:24px;height:2px;background:var(--teal);display:inline-block;border-radius:2px}
+  .section-title{
+    font-family:'Fraunces',serif;
+    font-size:clamp(1.9rem,3.2vw,2.7rem);
+    color:var(--ink);line-height:1.15;margin-bottom:18px;font-weight:600;letter-spacing:-.5px;
+  }
+  .section-desc{color:var(--muted);font-size:17px;line-height:1.7;max-width:600px}
+  .center{text-align:center;display:flex;flex-direction:column;align-items:center}
+  .center .section-desc{margin:0 auto}
+
+  /* SOBRE */
+  .sobre{background:var(--bg-soft)}
+  .sobre-inner{display:grid;grid-template-columns:0.85fr 1.15fr;gap:64px;align-items:center}
+  .sobre-img{aspect-ratio:3/4;position:relative}
+  .sobre-img .photo-ph{border-radius:24px}
+  .crm-badge{
+    position:absolute;bottom:20px;left:20px;z-index:2;
+    background:var(--teal);color:#fff;
+    font-size:12px;font-weight:700;padding:9px 16px;border-radius:100px;
+    box-shadow:0 6px 20px rgba(22,53,127,0.3);
+  }
+  .sobre-text p{color:var(--muted);font-size:16px;line-height:1.85;margin-bottom:16px;text-align:justify;text-justify:inter-word}
+  .sobre-list{list-style:none;display:grid;grid-template-columns:1fr 1fr;gap:14px;margin-top:28px}
+  .sobre-list li{
+    display:flex;align-items:center;gap:12px;
+    color:var(--ink);font-size:14.5px;font-weight:600;
+  }
+  .sobre-list li svg{width:22px;height:22px;stroke:var(--teal);stroke-width:2;fill:none;flex-shrink:0}
+
+  /* ESPECIALIDADES */
+  .esp-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:24px;margin-top:56px}
+  .esp-card{
+    background:#fff;border:1px solid var(--line);
+    border-radius:20px;padding:32px 28px;
+    transition:border-color .3s ease, transform .3s ease, box-shadow .3s ease;
+  }
+  .esp-card:hover{
+    border-color:var(--teal);
+    transform:translateY(-6px);
+    box-shadow:0 18px 44px rgba(6,18,54,0.09);
+  }
+  .esp-icon{
+    width:56px;height:56px;border-radius:16px;
+    background:var(--teal-soft);
+    display:flex;align-items:center;justify-content:center;
+    margin-bottom:22px;
+    transition:background .3s ease, transform .3s ease;
+  }
+  .esp-icon svg{width:28px;height:28px;stroke:var(--teal);stroke-width:1.6;fill:none;transition:stroke .3s ease}
+  .esp-card:hover .esp-icon{background:var(--teal);transform:scale(1.05)}
+  .esp-card:hover .esp-icon svg{stroke:#fff}
+  .esp-card h3{color:var(--ink);font-size:18px;font-weight:700;margin-bottom:10px}
+  .esp-card p{color:var(--muted);font-size:14.5px;line-height:1.7}
+
+  /* EQUIPE — layout premium de médico único */
+  .equipe{background:var(--bg-soft)}
+  .doctor-card{
+    max-width:840px;margin:56px auto 0;
+    background:#fff;border:1px solid var(--line);border-radius:28px;overflow:hidden;
+    display:grid;grid-template-columns:300px 1fr;
+    box-shadow:0 24px 60px rgba(6,18,54,0.07);
+  }
+  .doctor-photo{position:relative;min-height:340px}
+  .doctor-photo .photo-ph{border-radius:0}
+  .doctor-info{padding:44px 44px}
+  .doctor-info .d-role{font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:1px;margin-bottom:10px}
+  .doctor-info h3{font-family:'Monotype Corsiva','Pinyon Script',cursive;font-size:3rem;font-weight:400;color:var(--ink);margin-bottom:10px;line-height:1.1}
+  .doctor-info .d-crm{display:inline-block;font-size:12px;color:var(--teal);background:var(--teal-soft);padding:6px 14px;border-radius:100px;font-weight:700;margin-bottom:20px}
+  .doctor-info p{color:var(--muted);font-size:15px;line-height:1.8;margin-bottom:24px;text-align:justify;text-justify:inter-word}
+  .doctor-tags{display:flex;flex-wrap:wrap;gap:8px;margin-bottom:28px}
+  .doctor-tags span{font-size:12.5px;font-weight:600;color:var(--ink);background:var(--bg-soft);border:1px solid var(--line);padding:6px 14px;border-radius:100px}
+  .doctor-cta{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#25d366;color:#fff;padding:13px 26px;border-radius:100px;
+    font-weight:700;font-size:14.5px;text-decoration:none;transition:all .2s;
+  }
+  .doctor-cta:hover{background:#1fb85a;transform:translateY(-2px)}
+  .doctor-cta svg{width:19px;height:19px;stroke:currentColor;stroke-width:2;fill:none}
+
+  /* AGENDAMENTO ONLINE */
+  .agendamento{background:var(--bg);position:relative;overflow:hidden}
+  .agendamento::before{content:'';position:absolute;top:-120px;left:-120px;width:420px;height:420px;border-radius:50%;background:radial-gradient(circle,var(--teal-soft),transparent 70%);z-index:0}
+  .agenda-inner{position:relative;z-index:1;max-width:760px;margin:0 auto}
+  .agenda-widget{
+    margin-top:48px;background:#fff;border:1px solid var(--line);border-radius:24px;
+    box-shadow:0 24px 60px rgba(6,18,54,0.08);overflow:hidden;
+  }
+  .agenda-widget iframe{display:block;width:100%;border:0}
+  .agenda-embed{padding:28px}
+  #zl-url{display:block;text-decoration:none}
+  .agenda-alt{margin-top:20px;text-align:center;font-size:14px;color:var(--muted)}
+  .agenda-alt a{color:var(--teal);font-weight:700;text-decoration:none;margin-left:6px}
+  .agenda-alt a:hover{text-decoration:underline}
+  /* Placeholder mostrado enquanto o widget real não é colado */
+  .agenda-placeholder{
+    padding:56px 32px;text-align:center;
+    background:
+      repeating-linear-gradient(45deg, transparent, transparent 14px, rgba(22,53,127,0.02) 14px, rgba(22,53,127,0.02) 28px),
+      var(--bg-soft);
+  }
+  .agenda-placeholder .ap-icon{
+    width:80px;height:80px;border-radius:22px;margin:0 auto 22px;background:var(--teal-soft);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .agenda-placeholder .ap-icon svg{width:40px;height:40px;stroke:var(--teal);stroke-width:1.6;fill:none}
+  .agenda-placeholder h3{font-family:'Fraunces',serif;font-size:1.4rem;color:var(--ink);font-weight:600;margin-bottom:10px}
+  .agenda-placeholder p{color:var(--muted);font-size:15px;line-height:1.7;max-width:440px;margin:0 auto 26px}
+  .agenda-placeholder .ap-note{
+    display:inline-block;font-size:12.5px;color:var(--teal);background:var(--teal-soft);
+    padding:8px 16px;border-radius:100px;font-weight:600;
+  }
+  .agenda-fallback{
+    display:inline-flex;align-items:center;gap:10px;
+    background:#25d366;color:#fff;padding:14px 28px;border-radius:100px;
+    font-weight:700;font-size:15px;text-decoration:none;transition:all .2s;margin-bottom:18px;
+  }
+  .agenda-fallback:hover{background:#1fb85a;transform:translateY(-2px)}
+  .agenda-fallback svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none}
+
+  /* EXAMES */
+  .exames{background:var(--ink);color:#fff}
+  .exames .section-title{color:#fff}
+  .exames .section-desc{color:rgba(255,255,255,0.6)}
+  .exames .section-tag{color:#8fb0ec}
+  .exames .section-tag::before{background:#8fb0ec}
+  .exames-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(230px,1fr));gap:16px;margin-top:56px}
+  .exame-card{
+    background:rgba(255,255,255,0.04);
+    border:1px solid rgba(255,255,255,0.08);
+    border-radius:16px;padding:26px 24px;
+    display:flex;flex-direction:column;gap:14px;
+    transition:all .2s;
+  }
+  .exame-card:hover{background:rgba(255,255,255,0.08);border-color:rgba(124,160,230,0.5);transform:translateY(-3px)}
+  .exame-num{font-family:'Fraunces',serif;font-size:1.5rem;font-weight:600;color:#8fb0ec;line-height:1}
+  .exame-card h4{font-size:15px;font-weight:600;color:#fff;line-height:1.4}
+  .exame-tag{
+    align-self:flex-start;
+    background:rgba(255,255,255,0.1);color:#bcd0f2;
+    font-size:11px;font-weight:700;padding:5px 12px;border-radius:100px;
+    letter-spacing:.5px;text-transform:uppercase;
+  }
+
+  /* CONVÊNIOS E REEMBOLSO */
+  .convenios{background:var(--bg)}
+  .conv-logos{
+    display:grid;grid-template-columns:repeat(auto-fit,minmax(150px,1fr));gap:18px;margin:48px 0 40px;
+  }
+  .conv-logo{
+    height:96px;border-radius:16px;background:var(--bg-soft);border:1px solid var(--line);
+    display:flex;align-items:center;justify-content:center;
+    color:var(--muted);font-size:13px;font-weight:600;
+    transition:all .25s;position:relative;overflow:hidden;
+  }
+  .conv-logo::before{
+    content:'';position:absolute;top:0;left:-60%;width:40%;height:100%;
+    background:linear-gradient(100deg,transparent,rgba(255,255,255,0.6),transparent);
+    animation:shimmer 3.5s infinite;
+  }
+  .conv-logo:hover{border-color:var(--teal);color:var(--teal);transform:translateY(-3px);box-shadow:0 12px 30px rgba(6,18,54,0.06)}
+  .conv-logo span{position:relative;z-index:1;text-align:center;line-height:1.3}
+  .reembolso-box{
+    background:linear-gradient(135deg,var(--teal),var(--teal-dark));
+    border-radius:24px;padding:40px 44px;color:#fff;
+    display:flex;align-items:center;gap:28px;flex-wrap:wrap;position:relative;overflow:hidden;
+  }
+  .reembolso-box::after{content:'';position:absolute;top:-60px;right:-40px;width:220px;height:220px;border-radius:50%;background:radial-gradient(circle,rgba(143,176,236,0.25),transparent 70%)}
+  .reembolso-icon{
+    width:72px;height:72px;border-radius:20px;background:rgba(255,255,255,0.12);flex-shrink:0;
+    display:flex;align-items:center;justify-content:center;position:relative;z-index:1;
+  }
+  .reembolso-icon svg{width:36px;height:36px;stroke:#fff;stroke-width:1.8;fill:none}
+  .reembolso-text{position:relative;z-index:1;flex:1;min-width:260px}
+  .reembolso-text h3{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;margin-bottom:8px}
+  .reembolso-text p{color:rgba(255,255,255,0.82);font-size:15px;line-height:1.7;text-align:justify;text-justify:inter-word}
+
+  /* CONTATO */
+  .contato{background:var(--bg-soft)}
+  .contato-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:56px}
+  .contato-info{display:flex;flex-direction:column;gap:20px}
+  .info-item{
+    display:flex;align-items:flex-start;gap:18px;
+    background:#fff;border:1px solid var(--line);
+    border-radius:16px;padding:22px 24px;transition:all .2s;
+  }
+  .info-item:hover{border-color:var(--teal);box-shadow:0 8px 24px rgba(6,18,54,0.05)}
+  .info-icon{
+    width:48px;height:48px;border-radius:13px;flex-shrink:0;
+    background:var(--teal-soft);
+    display:flex;align-items:center;justify-content:center;
+  }
+  .info-icon svg{width:22px;height:22px;stroke:var(--teal);stroke-width:1.8;fill:none}
+  .info-item strong{display:block;font-size:12px;font-weight:700;color:var(--teal);text-transform:uppercase;letter-spacing:.6px;margin-bottom:5px}
+  .info-item span{font-size:15.5px;color:var(--ink);line-height:1.6;font-weight:500}
+  .info-item a{color:var(--ink);text-decoration:none;font-weight:600}
+  .info-item a:hover{color:var(--teal)}
+
+  .cta-box{background:var(--ink);border-radius:24px;padding:44px 40px;position:relative;overflow:hidden}
+  .cta-box::after{content:'';position:absolute;top:-60px;right:-60px;width:240px;height:240px;border-radius:50%;background:radial-gradient(circle,rgba(143,176,236,0.2),transparent 70%)}
+  .cta-box h3{font-family:'Fraunces',serif;color:#fff;font-size:1.8rem;margin-bottom:14px;font-weight:600;position:relative}
+  .cta-box p{color:rgba(255,255,255,0.6);font-size:15.5px;line-height:1.7;margin-bottom:32px;position:relative}
+  .cta-btns{display:flex;flex-direction:column;gap:12px;position:relative}
+  .cta-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:16px 24px;border-radius:100px;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s}
+  .cta-btn.whats{background:#25d366;color:#fff}
+  .cta-btn.whats:hover{background:#1fb85a;transform:translateY(-2px)}
+  .cta-btn.tel{background:rgba(255,255,255,0.08);color:#fff;border:1px solid rgba(255,255,255,0.18)}
+  .cta-btn.tel:hover{background:rgba(255,255,255,0.14)}
+  .cta-btn svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0}
+
+  /* FOOTER */
+  footer{background:#fff;border-top:1px solid var(--line);padding:44px 6vw}
+  .footer-inner{max-width:1240px;margin:0 auto;display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:20px}
+  .footer-brand{color:var(--ink);font-size:17px;font-weight:800;letter-spacing:.3px}
+  .footer-brand span{color:var(--teal)}
+  .footer-crm{color:var(--muted);font-size:13px;margin-top:4px}
+  .footer-copy{color:var(--muted);font-size:13px}
+
+  /* MODAL CAPTAÇÃO */
+  .modal-overlay{
+    position:fixed;inset:0;z-index:1000;
+    background:rgba(6,18,54,0.65);-webkit-backdrop-filter:blur(5px);backdrop-filter:blur(5px);
+    display:flex;align-items:center;justify-content:center;padding:20px;overflow-y:auto;
+    opacity:0;visibility:hidden;transition:opacity .35s ease;
+  }
+  .modal-overlay.show{opacity:1;visibility:visible}
+  .modal{
+    background:#fff;border-radius:24px;max-width:440px;width:100%;
+    max-height:92vh;overflow-y:auto;position:relative;
+    transform:scale(0.88) translateY(10px);transition:transform .4s cubic-bezier(.2,.9,.3,1.3);
+    box-shadow:0 30px 90px rgba(6,18,54,0.45);
+  }
+  .modal-overlay.show .modal{transform:scale(1) translateY(0)}
+  .modal-top{background:var(--ink);padding:34px 32px 30px;text-align:center;position:relative;overflow:hidden}
+  .modal-top::after{content:'';position:absolute;top:-50px;right:-50px;width:180px;height:180px;border-radius:50%;background:radial-gradient(circle,rgba(143,176,236,0.22),transparent 70%)}
+  .modal-badge{width:64px;height:64px;border-radius:18px;margin:0 auto 18px;background:rgba(255,255,255,0.1);display:flex;align-items:center;justify-content:center;position:relative}
+  .modal-badge svg{width:34px;height:34px;stroke:#8fb0ec;stroke-width:2;fill:none}
+  .modal-top h3{font-family:'Fraunces',serif;color:#fff;font-size:1.5rem;font-weight:600;margin-bottom:8px;position:relative}
+  .modal-top p{color:rgba(255,255,255,0.7);font-size:14.5px;line-height:1.55;position:relative}
+  .modal-close{position:absolute;top:16px;right:16px;width:34px;height:34px;border-radius:50%;background:rgba(255,255,255,0.12);border:none;color:#fff;font-size:20px;line-height:1;cursor:pointer;display:flex;align-items:center;justify-content:center;transition:background .2s;z-index:2}
+  .modal-close:hover{background:rgba(255,255,255,0.22)}
+  .modal-body{padding:26px 32px 30px;text-align:center}
+  .modal-perks{display:flex;flex-direction:column;gap:10px;margin-bottom:24px;text-align:left}
+  .modal-perk{display:flex;align-items:center;gap:10px;font-size:14px;color:var(--ink);font-weight:500}
+  .modal-perk svg{width:20px;height:20px;stroke:var(--teal);stroke-width:2.2;fill:none;flex-shrink:0}
+  .modal-btns{display:flex;flex-direction:column;gap:10px}
+  .modal-btn{display:flex;align-items:center;justify-content:center;gap:10px;padding:15px 24px;border-radius:100px;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s}
+  .modal-btn.whats{background:#25d366;color:#fff}
+  .modal-btn.whats:hover{background:#1fb85a;transform:translateY(-2px)}
+  .modal-btn.tel{background:var(--teal-soft);color:var(--teal);border:1px solid var(--teal-soft)}
+  .modal-btn.tel:hover{background:#dbe4f5}
+  .modal-btn svg{width:20px;height:20px;stroke:currentColor;stroke-width:2;fill:none;flex-shrink:0}
+  .modal-dismiss{background:none;border:none;color:var(--muted);font-size:13px;font-weight:500;cursor:pointer;margin-top:16px;text-decoration:underline;font-family:inherit}
+  .modal-dismiss:hover{color:var(--ink)}
+
+  /* RESPONSIVO */
+  @media(max-width:900px){
+    .nav-toggle{display:flex}
+    .nav-right{gap:14px}
+    .nav-links{
+      position:fixed;top:74px;left:0;right:0;
+      background:#fff;border-bottom:1px solid var(--line);
+      flex-direction:column;gap:0;padding:8px 6vw 20px;
+      box-shadow:0 20px 40px rgba(6,18,54,0.08);
+      transform:translateY(-12px);opacity:0;visibility:hidden;
+      transition:transform .3s ease, opacity .3s ease;
+    }
+    .nav-links.show{transform:translateY(0);opacity:1;visibility:visible}
+    .nav-links li{width:100%;border-bottom:1px solid var(--line)}
+    .nav-links li:last-child{border-bottom:none}
+    .nav-links a{display:block;padding:15px 4px;font-size:15px}
+    .hero-inner,.sobre-inner,.contato-inner{grid-template-columns:1fr;gap:48px}
+    .hero-visual{max-width:420px;margin:0 auto;width:100%}
+    .sobre-list{grid-template-columns:1fr}
+    .doctor-card{grid-template-columns:1fr;max-width:440px}
+    .doctor-photo{min-height:300px}
+  }
+  @media(max-width:560px){
+    .modal-overlay{align-items:flex-start;padding:14px}
+    .modal{max-height:none;margin:auto 0}
+    .modal-top{padding:28px 24px 24px}
+    .modal-top h3{font-size:1.3rem}
+    .modal-body{padding:22px 24px 26px}
+    .reembolso-box{padding:30px 26px}
+  }
 </style>
 </head>
 <body>
 
-<div id="print-area" style="display:none"></div>
-<div id="toast"><span id="toast-ico"></span><span id="toast-msg"></span></div>
-<div id="overlay"><div class="spinner"></div><p id="overlay-msg">Carregando…</p></div>
-<div id="lightbox" onclick="closeLightbox()">
-  <button id="lightbox-close" onclick="closeLightbox()">✕</button>
-  <img id="lightbox-img" src="" alt="">
-</div>
+<!-- NAV -->
+<nav>
+  <a href="#inicio" class="nav-logo">
+    <span class="nav-logo-text">C.T.D.M.I.</span>
+    <span class="nav-logo-sub">Angiologia &amp; Cirurgia Vascular</span>
+  </a>
+  <div class="nav-right">
+    <ul class="nav-links" id="navLinks">
+      <li><a href="#sobre">Sobre</a></li>
+      <li><a href="#especialidades">Especialidades</a></li>
+      <li><a href="#equipe">Equipe</a></li>
+      <li><a href="#agendamento">Agende Online</a></li>
+      <li><a href="#exames">Exames</a></li>
+      <li><a href="#convenios">Convênios</a></li>
+      <li><a href="#contato">Contato</a></li>
+    </ul>
+    <a href="https://wa.me/5521996141313" class="nav-cta">Agendar</a>
+    <button class="nav-toggle" id="navToggle" aria-label="Abrir menu">
+      <span></span><span></span><span></span>
+    </button>
+  </div>
+</nav>
 
-<!-- ════ LOGIN ════ -->
-<div id="screen-login" class="screen active">
-  <div class="login-bg">
-    <svg class="ecg-line" viewBox="0 0 1440 120" preserveAspectRatio="none" xmlns="http://www.w3.org/2000/svg">
-      <polyline points="0,60 180,60 200,60 220,20 240,100 260,10 280,110 300,60 480,60 500,60 520,40 540,80 560,60 720,60 740,55 760,65 780,60 1440,60" fill="none" stroke="rgba(0,212,255,0.35)" stroke-width="2"/>
-    </svg>
-    <div class="login-center">
-      <div class="login-card">
-        <div class="lc-header">
-          <div class="lc-logo-wrap"><div class="lc-pulse"></div><div class="lc-logo-icon">🏥</div></div>
-          <div class="lc-brand">COPASULMED</div>
-          <div class="lc-brand-sub">Ficha Digital do Paciente</div>
-          <div class="lc-brand-detail">Cadastro · Anamnese · Receituário</div>
+<!-- HERO -->
+<section class="hero" id="inicio">
+  <div class="hero-inner">
+    <div class="hero-content">
+      <div class="hero-eyebrow">Saúde Vascular de Confiança</div>
+      <h1>Cuidado especializado para a sua <em>saúde vascular</em></h1>
+      <p class="hero-desc">Diagnóstico preciso e tratamento minimamente invasivo em Angiologia e Cirurgia Vascular, com tecnologia moderna e atendimento humanizado no Méier, Rio de Janeiro.</p>
+      <div class="hero-actions">
+        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta." class="btn-primary">
+          <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          Falar pelo WhatsApp
+        </a>
+        <a href="#especialidades" class="btn-outline">Conheça nossos serviços</a>
+      </div>
+      <div class="hero-trust">
+        <div class="trust-item"><span class="trust-num">+20</span><span class="trust-label">Anos de experiência</span></div>
+        <div class="trust-item"><span class="trust-num">3</span><span class="trust-label">Especialidades</span></div>
+        <div class="trust-item"><span class="trust-num">100%</span><span class="trust-label">Atendimento dedicado</span></div>
+      </div>
+    </div>
+    <div class="hero-visual">
+      <div class="hero-img">
+        <div class="photo-ph">
+          <div class="ph-icon">
+            <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="M21 15l-5-5L5 21"/></svg>
+          </div>
+          <div class="ph-label"><strong>Foto do Dr. Hugnei Ferro</strong><span>Espaço reservado para imagem</span></div>
         </div>
-        <div class="lc-form">
-          <div class="lc-form-title">Acesso ao Sistema</div>
-          <input id="login-url" class="lc-input" type="url" placeholder="URL do Supabase">
-          <input id="login-key" class="lc-input" type="password" placeholder="Chave Anon / Publishable Key">
-          <input id="login-email" class="lc-input" type="email" placeholder="E-mail" autocomplete="username">
-          <input id="login-pass" class="lc-input" type="password" placeholder="Senha" autocomplete="current-password">
-          <button class="lc-btn" onclick="doLogin()">Entrar no Sistema</button>
-          <div style="text-align:center;margin-top:12px;font-size:11px;color:rgba(100,150,170,0.5)">Copasulmed © 2025 — v2.0</div>
+      </div>
+      <div class="float-card fc1">
+        <div class="fc-icon"><svg viewBox="0 0 24 24"><path d="M22 11.08V12a10 10 0 11-5.93-9.14"/><polyline points="22 4 12 14.01 9 11.01"/></svg></div>
+        <div class="fc-text"><strong>Dr. Hugnei Ferro</strong><span>CRM 11.1260-0</span></div>
+      </div>
+      <div class="float-card fc2">
+        <div class="fc-icon gold"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="3"/><path d="M12 1v6M12 17v6M4.22 4.22l4.24 4.24M15.54 15.54l4.24 4.24M1 12h6M17 12h6"/></svg></div>
+        <div class="fc-text"><strong>Doppler</strong><span>Alta precisão</span></div>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- SOBRE -->
+<section class="sobre" id="sobre">
+  <div class="wrap sobre-inner">
+    <div class="sobre-img">
+      <div class="photo-ph">
+        <div class="ph-icon">
+          <svg viewBox="0 0 24 24"><rect x="3" y="3" width="18" height="18" rx="3"/><circle cx="8.5" cy="8.5" r="1.8"/><path d="M21 15l-5-5L5 21"/></svg>
+        </div>
+        <div class="ph-label"><strong>Foto da Clínica</strong><span>Espaço reservado para imagem</span></div>
+      </div>
+      <div class="crm-badge">CRM 11.1260-0</div>
+    </div>
+    <div class="sobre-text">
+      <div class="section-tag">Sobre a Clínica</div>
+      <h2 class="section-title">Prazer, somos o C.T.D.M.I.</h2>
+      <p>O Centro de Tratamento e Diagnóstico Minimamente Invasivo é especializado em Angiologia e Cirurgia Vascular, dedicado ao diagnóstico e tratamento das doenças vasculares com as técnicas mais modernas e menos invasivas.</p>
+      <p>Sob a direção técnica do Dr. Hugnei Ferro, unimos tecnologia avançada e um atendimento próximo e humanizado, para que cada paciente se sinta seguro e bem cuidado em todas as etapas.</p>
+      <ul class="sobre-list">
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Cirurgia minimamente invasiva</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Ecografia com Doppler</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Tratamento de varizes</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Doenças arteriais e venosas</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>No coração do Méier</li>
+        <li><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Atendimento humanizado</li>
+      </ul>
+    </div>
+  </div>
+</section>
+
+<!-- ESPECIALIDADES -->
+<section class="especialidades" id="especialidades">
+  <div class="wrap center">
+    <div class="section-tag">Áreas de Atuação</div>
+    <h2 class="section-title">Nossas Especialidades</h2>
+    <p class="section-desc">Cuidado completo nas principais áreas da medicina vascular, do diagnóstico ao tratamento.</p>
+  </div>
+  <div class="wrap esp-grid">
+    <div class="esp-card">
+      <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M12 2a7 7 0 017 7c0 5-7 13-7 13S5 14 5 9a7 7 0 017-7z"/><circle cx="12" cy="9" r="2.5"/></svg></div>
+      <h3>Angiologia</h3>
+      <p>Diagnóstico e tratamento clínico das doenças que afetam artérias, veias e vasos linfáticos.</p>
+    </div>
+    <div class="esp-card">
+      <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M12 22s8-4 8-10V5l-8-3-8 3v7c0 6 8 10 8 10z"/></svg></div>
+      <h3>Cirurgia Vascular</h3>
+      <p>Procedimentos cirúrgicos vasculares com técnicas modernas e minimamente invasivas.</p>
+    </div>
+    <div class="esp-card">
+      <div class="esp-icon"><svg viewBox="0 0 24 24"><circle cx="12" cy="12" r="2.5"/><path d="M12 2v4M12 18v4M4.93 4.93l2.83 2.83M16.24 16.24l2.83 2.83M2 12h4M18 12h4M4.93 19.07l2.83-2.83M16.24 7.76l2.83-2.83"/></svg></div>
+      <h3>Ecografia com Doppler</h3>
+      <p>Ultrassonografia vascular para avaliar o fluxo sanguíneo com alta precisão diagnóstica.</p>
+    </div>
+    <div class="esp-card">
+      <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M4 15s1-1 4-1 5 2 8 2 4-1 4-1V3s-1 1-4 1-5-2-8-2-4 1-4 1z"/><line x1="4" y1="22" x2="4" y2="15"/></svg></div>
+      <h3>Varizes</h3>
+      <p>Avaliação e tratamento de varizes e insuficiência venosa, com foco estético e funcional.</p>
+    </div>
+    <div class="esp-card">
+      <div class="esp-icon"><svg viewBox="0 0 24 24"><polyline points="22 12 18 12 15 21 9 3 6 12 2 12"/></svg></div>
+      <h3>Doenças Arteriais</h3>
+      <p>Acompanhamento de arteriosclerose, isquemia e demais doenças arteriais dos membros.</p>
+    </div>
+    <div class="esp-card">
+      <div class="esp-icon"><svg viewBox="0 0 24 24"><path d="M20.84 4.61a5.5 5.5 0 00-7.78 0L12 5.67l-1.06-1.06a5.5 5.5 0 00-7.78 7.78l1.06 1.06L12 21.23l7.78-7.78 1.06-1.06a5.5 5.5 0 000-7.78z"/></svg></div>
+      <h3>Prevenção Vascular</h3>
+      <p>Consultas preventivas para identificar precocemente fatores de risco e doenças vasculares.</p>
+    </div>
+  </div>
+</section>
+
+<!-- EQUIPE -->
+<section class="equipe" id="equipe">
+  <div class="wrap center">
+    <div class="section-tag">Quem Cuida de Você</div>
+    <h2 class="section-title">Direção Médica</h2>
+    <p class="section-desc">Atendimento conduzido pessoalmente por um especialista experiente em saúde vascular.</p>
+  </div>
+  <div class="wrap">
+    <div class="doctor-card">
+      <div class="doctor-photo">
+        <div class="photo-ph">
+          <div class="ph-icon"><svg viewBox="0 0 24 24"><path d="M20 21v-2a4 4 0 00-4-4H8a4 4 0 00-4 4v2"/><circle cx="12" cy="7" r="4"/></svg></div>
+          <div class="ph-label"><strong>Foto do Dr. Hugnei</strong><span>Espaço reservado</span></div>
+        </div>
+      </div>
+      <div class="doctor-info">
+        <div class="d-role">Diretor Técnico</div>
+        <h3>Dr. Hugnei Ferro</h3>
+        <span class="d-crm">CRM 11.1260-0</span>
+        <p>Especialista em Angiologia e Cirurgia Vascular, com ampla experiência em diagnóstico por Doppler e procedimentos minimamente invasivos. Atendimento humanizado, do diagnóstico ao tratamento, sempre com foco no bem-estar do paciente.</p>
+        <div class="doctor-tags">
+          <span>Angiologia</span>
+          <span>Cirurgia Vascular</span>
+          <span>Ecografia com Doppler</span>
+        </div>
+        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20com%20o%20Dr.%20Hugnei." class="doctor-cta">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          Agendar com o Dr. Hugnei
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- AGENDAMENTO ONLINE -->
+<section class="agendamento" id="agendamento">
+  <div class="agenda-inner center">
+    <div class="section-tag">Agenda Online</div>
+    <h2 class="section-title">Agende sua consulta online</h2>
+    <p class="section-desc">Escolha o melhor dia e horário diretamente pela agenda do Dr. Hugnei Ferro. Rápido, prático e sem complicação.</p>
+
+    <div class="agenda-widget" id="agendamento-widget">
+      <div class="agenda-embed">
+        <!-- Widget oficial Doctoralia – Dr. Hugnei Ferro -->
+        <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/hugnei-ferro/cirurgiao-vascular-angiologista/duque-de-caxias" rel="nofollow" data-zlw-doctor="hugnei-ferro" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Marque uma consulta</a>
+        <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "//platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
+        <div class="agenda-alt">
+          Prefere falar direto?
+          <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta.">Agendar pelo WhatsApp</a>
         </div>
       </div>
     </div>
   </div>
-</div>
+</section>
 
-<!-- ════ APP ════ -->
-<div id="screen-app" class="screen">
-  <nav class="navbar">
-    <div class="nav-brand">
-      <span style="font-size:22px">🏥</span>
-      <div><div class="nav-brand-name">COPASULMED</div><div class="nav-brand-sub">Ficha Digital</div></div>
-    </div>
-    <div class="nav-right">
-      <div style="display:flex;align-items:center;gap:8px">
-        <div class="nav-avatar" id="nav-avatar">M</div>
-        <div style="text-align:right">
-          <div id="nav-nome-med" style="font-size:12px;color:#fff;font-weight:700"></div>
-          <div id="nav-crm-med" style="font-size:10px;color:rgba(255,255,255,0.6)"></div>
-        </div>
-      </div>
-      <button class="btn btn-outline" style="border-color:rgba(255,255,255,0.3);color:rgba(255,255,255,0.8);font-size:12px;padding:6px 12px" onclick="doLogout()">Sair</button>
-    </div>
-  </nav>
-
-  <div class="main-layout">
-    <aside class="sidebar">
-      <div class="sidebar-section">Menu</div>
-      <button class="sidebar-btn active" id="sb-pacientes" onclick="navTo('pacientes')">
-        <span class="sb-icon">👥</span> Pacientes
-        <span class="sidebar-count" id="sb-count-pac">0</span>
-      </button>
-      <button class="sidebar-btn" id="sb-novo" onclick="openNovoModal()">
-        <span class="sb-icon">➕</span> Novo Paciente
-      </button>
-      <div class="sidebar-section" style="margin-top:8px">Administração</div>
-      <button class="sidebar-btn" id="sb-medicos" onclick="navTo('medicos')">
-        <span class="sb-icon">👨‍⚕️</span> Médicos
-      </button>
-      <div class="sidebar-section" style="margin-top:8px">Conta</div>
-      <button class="sidebar-btn" onclick="doLogout()"><span class="sb-icon">🚪</span> Sair</button>
-    </aside>
-
-    <main class="content-area">
-
-      <!-- LISTA -->
-      <div id="view-lista">
-        <div class="page-header">
-          <div class="page-title">Pacientes <span>Copasulmed</span></div>
-          <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
-            <div class="search-bar">
-              <span style="color:var(--text-muted)">🔍</span>
-              <input id="search-input" type="text" placeholder="Buscar por nome, CPF ou telefone…" oninput="filtrarPacientes()">
-            </div>
-            <button class="btn btn-green" onclick="openNovoModal()">➕ Novo Paciente</button>
-          </div>
-        </div>
-        <div class="stats-row">
-          <div class="stat-card"><div class="stat-val" id="stat-total">0</div><div class="stat-lbl">Total de Pacientes</div></div>
-          <div class="stat-card"><div class="stat-val" id="stat-mes">0</div><div class="stat-lbl">Cadastrados este mês</div></div>
-          <div class="stat-card"><div class="stat-val" id="stat-anam">0</div><div class="stat-lbl">Consultas registradas</div></div>
-        </div>
-        <div id="patient-list" class="patient-grid"></div>
-        <div id="empty-list" class="empty-state" style="display:none">
-          <div class="empty-icon">👥</div><p>Nenhum paciente encontrado</p><small>Clique em "Novo Paciente" para adicionar.</small>
-        </div>
-      </div>
-
-      <!-- FICHA -->
-      <div id="view-ficha" style="display:none">
-        <div style="margin-bottom:16px"><button class="btn btn-outline btn-sm" onclick="voltarLista()">← Voltar</button></div>
-        <div class="ficha-header">
-          <div class="ficha-avatar-big" id="ficha-avatar-big">?</div>
-          <div style="flex:1">
-            <div class="ficha-name" id="ficha-nome-display">—</div>
-            <div class="ficha-meta-row" id="ficha-meta-row"></div>
-            <div id="ficha-alertas" style="margin-top:8px"></div>
-            <div class="ficha-actions">
-              <button class="btn btn-green btn-sm" onclick="abrirEditarPaciente()">✏️ Editar</button>
-              <button class="btn btn-outline btn-sm" onclick="imprimirFicha()">🖨️ Imprimir</button>
-              <button class="btn btn-red btn-sm" onclick="openModal('modal-excluir')">🗑️ Excluir</button>
-            </div>
-          </div>
-        </div>
-        <div class="tabs">
-          <button class="tab-btn active" onclick="mudarTab('dados')" id="tab-dados">📋 Dados Pessoais</button>
-          <button class="tab-btn" onclick="mudarTab('anamnese')" id="tab-anamnese">📝 Anamnese <span class="tab-badge" id="badge-anam">0</span></button>
-          <button class="tab-btn" onclick="mudarTab('receita')" id="tab-receita">💊 Receitas <span class="tab-badge" id="badge-rec">0</span></button>
-          <button class="tab-btn" onclick="mudarTab('imagens')" id="tab-imagens">🖼️ Imagens <span class="tab-badge" id="badge-imgs">0</span></button>
-        </div>
-
-        <!-- Tab Dados -->
-        <div id="tab-content-dados">
-          <div class="section-card">
-            <div class="section-card-hdr"><div class="section-card-title">🪪 Identificação</div></div>
-            <div class="section-card-body"><div class="form-grid" id="ficha-dados-id"></div></div>
-          </div>
-          <div class="section-card">
-            <div class="section-card-hdr"><div class="section-card-title">📞 Contato</div></div>
-            <div class="section-card-body"><div class="form-grid" id="ficha-dados-contato"></div></div>
-          </div>
-          <div class="section-card">
-            <div class="section-card-hdr"><div class="section-card-title">❤️ Dados Clínicos</div></div>
-            <div class="section-card-body"><div class="form-grid" id="ficha-dados-clinicos"></div></div>
-          </div>
-        </div>
-
-        <!-- Tab Anamnese -->
-        <div id="tab-content-anamnese" style="display:none">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
-            <button class="btn btn-green" onclick="openAnamneseModal()">➕ Nova Consulta</button>
-          </div>
-          <div id="anam-list"></div>
-          <div id="anam-empty" class="empty-state" style="display:none">
-            <div class="empty-icon">📝</div><p>Nenhuma anamnese registrada</p>
-          </div>
-        </div>
-
-        <!-- Tab Receita -->
-        <div id="tab-content-receita" style="display:none">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
-            <button class="btn btn-blue" onclick="openReceitaModal()">➕ Nova Receita</button>
-          </div>
-          <div id="receita-list"></div>
-          <div id="receita-empty" class="empty-state" style="display:none">
-            <div class="empty-icon">💊</div><p>Nenhuma receita emitida</p>
-          </div>
-        </div>
-
-        <!-- Tab Imagens -->
-        <div id="tab-content-imagens" style="display:none">
-          <div style="display:flex;justify-content:flex-end;margin-bottom:16px">
-            <button class="btn btn-green" onclick="document.getElementById('file-upload-hidden').click()">📎 Anexar</button>
-            <input type="file" id="file-upload-hidden" accept="image/*,application/pdf" multiple style="display:none" onchange="uploadImagens(this.files)">
-          </div>
-          <div class="upload-zone" onclick="document.getElementById('file-upload-hidden').click()" id="upload-zone-drop">
-            <div class="upload-icon">🖼️</div>
-            <p>Clique ou arraste imagens aqui</p>
-            <small>JPG, PNG, PDF — exames, laudos, fotos clínicas</small>
-          </div>
-          <div id="imgs-grid" class="img-grid" style="margin-top:16px"></div>
-          <div id="imgs-empty" class="empty-state" style="display:none;margin-top:16px">
-            <div class="empty-icon">🖼️</div><p>Nenhuma imagem anexada</p>
-          </div>
-        </div>
-      </div>
-
-      <!-- MÉDICOS -->
-      <div id="view-medicos" style="display:none">
-        <div class="page-header">
-          <div class="page-title">Médicos <span>Cadastrados</span></div>
-          <button class="btn btn-blue" onclick="openMedicoModal()">➕ Novo Médico</button>
-        </div>
-        <div id="medicos-list"></div>
-        <div id="medicos-empty" class="empty-state" style="display:none">
-          <div class="empty-icon">👨‍⚕️</div><p>Nenhum médico cadastrado</p>
-          <small>Cadastre os médicos para usar receitas e anamneses.</small>
-        </div>
-      </div>
-
-    </main>
+<!-- EXAMES -->
+<section class="exames" id="exames">
+  <div class="wrap center">
+    <div class="section-tag">Diagnóstico</div>
+    <h2 class="section-title">Exames Realizados</h2>
+    <p class="section-desc">Equipamentos modernos para diagnósticos precisos, seguros e confortáveis.</p>
   </div>
-</div>
+  <div class="wrap exames-grid">
+    <div class="exame-card"><span class="exame-num">01</span><h4>Eco Doppler Venoso de Membros Inferiores</h4><span class="exame-tag">Venoso</span></div>
+    <div class="exame-card"><span class="exame-num">02</span><h4>Eco Doppler Arterial de Membros Inferiores</h4><span class="exame-tag">Arterial</span></div>
+    <div class="exame-card"><span class="exame-num">03</span><h4>Eco Doppler de Carótidas e Vertebrais</h4><span class="exame-tag">Carotídeo</span></div>
+    <div class="exame-card"><span class="exame-num">04</span><h4>Eco Doppler Venoso de Membros Superiores</h4><span class="exame-tag">Venoso</span></div>
+    <div class="exame-card"><span class="exame-num">05</span><h4>Eco Doppler Arterial de Membros Superiores</h4><span class="exame-tag">Arterial</span></div>
+    <div class="exame-card"><span class="exame-num">06</span><h4>Mapeamento de Safena para Cirurgia</h4><span class="exame-tag">Pré-operatório</span></div>
+    <div class="exame-card"><span class="exame-num">07</span><h4>Eco Doppler Renal</h4><span class="exame-tag">Abdominal</span></div>
+    <div class="exame-card"><span class="exame-num">08</span><h4>Índice Tornozelo-Braquial (ITB)</h4><span class="exame-tag">Funcional</span></div>
+  </div>
+</section>
 
-<!-- ═ MODAL PACIENTE ═ -->
-<div id="modal-paciente" class="modal-bg" style="display:none">
-  <div class="modal" style="max-width:680px">
-    <div class="modal-hdr">
-      <span id="modal-pac-titulo" style="font-size:15px;font-weight:800">Novo Paciente</span>
-      <button class="modal-close" onclick="closeModal('modal-paciente')">✕</button>
+<!-- CONVÊNIOS E REEMBOLSO -->
+<section class="convenios" id="convenios">
+  <div class="wrap center">
+    <div class="section-tag">Pagamento e Planos</div>
+    <h2 class="section-title">Convênios e Reembolso</h2>
+    <p class="section-desc">Facilitamos o seu atendimento. Confira como utilizar o seu plano de saúde.</p>
+  </div>
+  <div class="wrap">
+    <div class="conv-logos">
+      <div class="conv-logo"><span>Logo<br>Plano de Saúde</span></div>
+      <div class="conv-logo"><span>Logo<br>Plano de Saúde</span></div>
+      <div class="conv-logo"><span>Logo<br>Plano de Saúde</span></div>
+      <div class="conv-logo"><span>Logo<br>Plano de Saúde</span></div>
+      <div class="conv-logo"><span>Logo<br>Plano de Saúde</span></div>
+      <div class="conv-logo"><span>Logo<br>Plano de Saúde</span></div>
+    </div>
+    <div class="reembolso-box">
+      <div class="reembolso-icon">
+        <svg viewBox="0 0 24 24"><path d="M14 2H6a2 2 0 00-2 2v16a2 2 0 002 2h12a2 2 0 002-2V8z"/><polyline points="14 2 14 8 20 8"/><line x1="9" y1="15" x2="15" y2="15"/><line x1="9" y1="11" x2="13" y2="11"/></svg>
+      </div>
+      <div class="reembolso-text">
+        <h3>Atendimento particular com reembolso</h3>
+        <p>Atendemos consultas particulares com emissão de recibo para solicitar reembolso junto ao seu plano de saúde. Entre em contato para verificar valores e como solicitar o reembolso no seu convênio.</p>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- CONTATO -->
+<section class="contato" id="contato">
+  <div class="wrap center">
+    <div class="section-tag">Fale Conosco</div>
+    <h2 class="section-title">Venha nos visitar</h2>
+    <p class="section-desc">Estamos prontos para atendê-lo com conforto e tecnologia, no coração do Méier.</p>
+  </div>
+  <div class="wrap contato-inner">
+    <div class="contato-info">
+      <div class="info-item">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M21 10c0 7-9 13-9 13s-9-6-9-13a9 9 0 0118 0z"/><circle cx="12" cy="10" r="3"/></svg></div>
+        <div><strong>Endereço</strong><span>Rua Dias da Cruz, 155 – Sala 611<br>Méier, Rio de Janeiro – RJ · CEP 20720-010</span></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg></div>
+        <div><strong>Telefone</strong><span><a href="tel:+552138221519">(21) 3822-1519</a></span></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg></div>
+        <div><strong>WhatsApp</strong><span><a href="https://wa.me/5521996141313">(21) 99614-1313</a></span></div>
+      </div>
+      <div class="info-item">
+        <div class="info-icon"><svg viewBox="0 0 24 24"><path d="M4 4h16c1.1 0 2 .9 2 2v12c0 1.1-.9 2-2 2H4c-1.1 0-2-.9-2-2V6c0-1.1.9-2 2-2z"/><polyline points="22,6 12,13 2,6"/></svg></div>
+        <div><strong>E-mail</strong><span style="font-size:14px"><a href="mailto:ctdmi.ecografiavascular@gmail.com">ctdmi.ecografiavascular@gmail.com</a></span></div>
+      </div>
+    </div>
+    <div class="cta-box">
+      <h3>Agende sua consulta</h3>
+      <p>Entre em contato pelo WhatsApp ou telefone para marcar sua consulta ou exame. Será um prazer cuidar de você.</p>
+      <div class="cta-btns">
+        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta." class="cta-btn whats">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          Agendar pelo WhatsApp
+        </a>
+        <a href="tel:+552138221519" class="cta-btn tel">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Ligar: (21) 3822-1519
+        </a>
+      </div>
+    </div>
+  </div>
+</section>
+
+<!-- FOOTER -->
+<footer>
+  <div class="footer-inner">
+    <div>
+      <div class="footer-brand">C.T.D.M.I. <span>·</span> Angiologia e Cirurgia Vascular</div>
+      <div class="footer-crm">Dr. Hugnei Ferro · CRM 11.1260-0 · Rua Dias da Cruz, 155 – Sala 611, Méier – RJ</div>
+    </div>
+    <div class="footer-copy">© 2025 C.T.D.M.I. · Todos os direitos reservados</div>
+  </div>
+</footer>
+
+<!-- MODAL CAPTAÇÃO -->
+<div class="modal-overlay" id="agendaModal">
+  <div class="modal">
+    <button class="modal-close" id="modalClose" aria-label="Fechar">&times;</button>
+    <div class="modal-top">
+      <div class="modal-badge">
+        <svg viewBox="0 0 24 24"><path d="M21 8.5a6 6 0 00-11.5-2.3A6 6 0 003 8.5c0 4.5 9 11 9 11s9-6.5 9-11z"/></svg>
+      </div>
+      <h3>Agende sua consulta</h3>
+      <p>Cuide da sua saúde vascular com atendimento especializado no Méier. Fale agora e marque seu horário.</p>
     </div>
     <div class="modal-body">
-      <p style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Identificação</p>
-      <div class="form-grid form-grid-2" style="margin-bottom:16px">
-        <div class="form-group full"><div class="form-label">Nome completo *</div><input class="form-input" id="pac-nome" placeholder="Ex: Maria Aparecida da Silva"></div>
-        <div class="form-group"><div class="form-label">Data de nascimento</div><input class="form-input" id="pac-nasc" type="date"></div>
-        <div class="form-group"><div class="form-label">Sexo</div><select class="form-input" id="pac-sexo"><option value="">—</option><option>Feminino</option><option>Masculino</option><option>Outro</option></select></div>
-        <div class="form-group"><div class="form-label">CPF</div><input class="form-input" id="pac-cpf" placeholder="000.000.000-00" maxlength="14" oninput="maskCPF(this)"></div>
-        <div class="form-group"><div class="form-label">RG</div><input class="form-input" id="pac-rg" placeholder="00.000.000-0"></div>
-        <div class="form-group"><div class="form-label">Estado civil</div><select class="form-input" id="pac-estado-civil"><option value="">—</option><option>Solteiro(a)</option><option>Casado(a)</option><option>Divorciado(a)</option><option>Viúvo(a)</option><option>União estável</option></select></div>
-        <div class="form-group"><div class="form-label">Profissão</div><input class="form-input" id="pac-profissao" placeholder="Ex: Professora"></div>
-        <div class="form-group"><div class="form-label">Convênio / Plano</div><input class="form-input" id="pac-convenio" placeholder="Ex: Unimed, SUS, Particular"></div>
-        <div class="form-group"><div class="form-label">Nº carteirinha</div><input class="form-input" id="pac-carteirinha"></div>
+      <div class="modal-perks">
+        <div class="modal-perk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Atendimento especializado em angiologia</div>
+        <div class="modal-perk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Exames de Doppler com alta precisão</div>
+        <div class="modal-perk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Resposta rápida pelo WhatsApp</div>
       </div>
-      <p style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Contato</p>
-      <div class="form-grid form-grid-2" style="margin-bottom:16px">
-        <div class="form-group"><div class="form-label">Telefone / WhatsApp</div><input class="form-input" id="pac-tel" placeholder="(00) 90000-0000" maxlength="16" oninput="maskTel(this)"></div>
-        <div class="form-group"><div class="form-label">Telefone 2</div><input class="form-input" id="pac-tel2" placeholder="(00) 90000-0000" maxlength="16" oninput="maskTel(this)"></div>
-        <div class="form-group"><div class="form-label">E-mail</div><input class="form-input" id="pac-email" type="email" placeholder="email@exemplo.com"></div>
-        <div class="form-group"><div class="form-label">Responsável</div><input class="form-input" id="pac-responsavel"></div>
-        <div class="form-group full"><div class="form-label">Endereço</div><input class="form-input" id="pac-endereco" placeholder="Rua, número, bairro"></div>
-        <div class="form-group"><div class="form-label">Cidade</div><input class="form-input" id="pac-cidade"></div>
-        <div class="form-group"><div class="form-label">UF</div><input class="form-input" id="pac-uf" placeholder="RS" maxlength="2"></div>
+      <div class="modal-btns">
+        <a href="https://wa.me/5521996141313?text=Olá,%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." class="modal-btn whats" id="modalWhats">
+          <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
+          Agendar pelo WhatsApp
+        </a>
+        <a href="tel:+552138221519" class="modal-btn tel">
+          <svg viewBox="0 0 24 24"><path d="M22 16.92v3a2 2 0 01-2.18 2 19.79 19.79 0 01-8.63-3.07A19.5 19.5 0 013.07 9.81 19.79 19.79 0 01.01 1.18 2 2 0 012 .01h3a2 2 0 012 1.72c.127.96.361 1.903.7 2.81a2 2 0 01-.45 2.11L6.09 7.91a16 16 0 006 6l1.27-1.27a2 2 0 012.11-.45c.907.339 1.85.573 2.81.7A2 2 0 0122 16.92z"/></svg>
+          Ligar: (21) 3822-1519
+        </a>
       </div>
-      <p style="font-size:11px;font-weight:700;color:var(--text-muted);text-transform:uppercase;letter-spacing:1px;margin-bottom:12px">Dados Clínicos</p>
-      <div class="form-grid form-grid-2">
-        <div class="form-group"><div class="form-label">Tipo sanguíneo</div><select class="form-input" id="pac-tipo-sang"><option value="">—</option><option>A+</option><option>A-</option><option>B+</option><option>B-</option><option>AB+</option><option>AB-</option><option>O+</option><option>O-</option></select></div>
-        <div class="form-group"><div class="form-label">Altura (cm)</div><input class="form-input" id="pac-altura" type="number" placeholder="170"></div>
-        <div class="form-group"><div class="form-label">Peso (kg)</div><input class="form-input" id="pac-peso" type="number" placeholder="70"></div>
-        <div class="form-group full"><div class="form-label">Alergias</div><input class="form-input" id="pac-alergias" placeholder="Ex: Dipirona, Penicilina (separe por vírgula)"></div>
-        <div class="form-group full"><div class="form-label">Medicamentos em uso</div><textarea class="form-input" id="pac-medicamentos" rows="3"></textarea></div>
-        <div class="form-group full"><div class="form-label">Observações gerais</div><textarea class="form-input" id="pac-obs" rows="3"></textarea></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-paciente')">Cancelar</button>
-      <button class="btn btn-green" onclick="salvarPaciente()">💾 Salvar Paciente</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═ MODAL ANAMNESE ═ -->
-<div id="modal-anamnese" class="modal-bg" style="display:none">
-  <div class="modal" style="max-width:560px">
-    <div class="modal-hdr">
-      <span style="font-size:15px;font-weight:800">📝 Nova Consulta</span>
-      <button class="modal-close" onclick="closeModal('modal-anamnese')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid form-grid-2" style="margin-bottom:14px">
-        <div class="form-group"><div class="form-label">Data</div><input class="form-input" id="anam-data" type="date" readonly></div>
-        <div class="form-group"><div class="form-label">Médico</div><input class="form-input" id="anam-medico" readonly></div>
-        <div class="form-group"><div class="form-label">Tipo</div><select class="form-input" id="anam-tipo"><option>Consulta</option><option>Retorno</option><option>Urgência</option><option>Procedimento</option><option>Exame</option></select></div>
-        <div class="form-group"><div class="form-label">Pressão arterial</div><input class="form-input" id="anam-pa" placeholder="120/80 mmHg"></div>
-        <div class="form-group"><div class="form-label">FC (bpm)</div><input class="form-input" id="anam-fc" type="number" placeholder="72"></div>
-        <div class="form-group"><div class="form-label">Temperatura (°C)</div><input class="form-input" id="anam-temp" type="number" step="0.1" placeholder="36.5"></div>
-        <div class="form-group"><div class="form-label">Peso (kg)</div><input class="form-input" id="anam-peso" type="number" placeholder="70"></div>
-        <div class="form-group"><div class="form-label">Saturação O₂ (%)</div><input class="form-input" id="anam-sat" type="number" placeholder="98"></div>
-      </div>
-      <div class="form-group">
-        <div class="form-label">Anotações da consulta</div>
-        <textarea class="form-input" id="anam-texto" rows="12" placeholder="Queixa, exame físico, hipótese diagnóstica, conduta…" style="min-height:220px"></textarea>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-anamnese')">Cancelar</button>
-      <button class="btn btn-green" onclick="salvarAnamnese()">💾 Salvar Consulta</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═ MODAL RECEITA ═ -->
-<div id="modal-receita" class="modal-bg" style="display:none">
-  <div class="modal" style="max-width:700px">
-    <div class="modal-hdr">
-      <span style="font-size:15px;font-weight:800">💊 Nova Receita</span>
-      <button class="modal-close" onclick="closeModal('modal-receita')">✕</button>
-    </div>
-    <div class="modal-body">
-      <div class="form-grid form-grid-2" style="margin-bottom:16px">
-        <div class="form-group"><div class="form-label">Data</div><input class="form-input" id="rec-data" type="date" readonly></div>
-        <div class="form-group"><div class="form-label">Médico</div><input class="form-input" id="rec-medico" readonly></div>
-      </div>
-      <div style="display:flex;align-items:center;justify-content:space-between;margin-bottom:8px">
-        <div class="form-label" style="font-size:12px">MEDICAMENTOS</div>
-        <button class="btn btn-green btn-sm" onclick="addMedRow()">+ Adicionar</button>
-      </div>
-      <div style="display:grid;grid-template-columns:1fr 130px 1fr 36px;gap:8px;padding:7px 12px;background:var(--green-pale);border-radius:8px 8px 0 0">
-        <div class="form-label">Medicamento *</div>
-        <div class="form-label">Dose</div>
-        <div class="form-label">Posologia</div>
-        <div></div>
-      </div>
-      <div id="meds-container" style="border:1.5px solid var(--border);border-top:none;border-radius:0 0 8px 8px;padding:8px 12px;min-height:50px"></div>
-      <div class="form-group" style="margin-top:14px">
-        <div class="form-label">Observações / Orientações</div>
-        <textarea class="form-input" id="rec-obs" rows="3" placeholder="Ex: Tomar após as refeições. Retornar em 30 dias."></textarea>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-receita')">Cancelar</button>
-      <button class="btn btn-blue" onclick="salvarReceita()">💾 Salvar Receita</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═ MODAL VER ANAMNESE ═ -->
-<div id="modal-ver-anam" class="modal-bg" style="display:none">
-  <div class="modal" style="max-width:600px">
-    <div class="modal-hdr">
-      <span id="ver-anam-titulo" style="font-size:15px;font-weight:800">Consulta</span>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-red btn-sm" onclick="excluirAnamnese()">🗑️</button>
-        <button class="modal-close" onclick="closeModal('modal-ver-anam')">✕</button>
-      </div>
-    </div>
-    <div class="modal-body" id="ver-anam-body"></div>
-  </div>
-</div>
-
-<!-- ═ MODAL VER RECEITA ═ -->
-<div id="modal-ver-receita" class="modal-bg" style="display:none">
-  <div class="modal" style="max-width:640px">
-    <div class="modal-hdr">
-      <span id="ver-rec-titulo" style="font-size:15px;font-weight:800">Receita</span>
-      <div style="display:flex;gap:8px">
-        <button class="btn btn-blue btn-sm" onclick="imprimirReceita()">🖨️ Imprimir</button>
-        <button class="btn btn-red btn-sm" onclick="excluirReceita()">🗑️</button>
-        <button class="modal-close" onclick="closeModal('modal-ver-receita')">✕</button>
-      </div>
-    </div>
-    <div class="modal-body" id="ver-rec-body"></div>
-  </div>
-</div>
-
-<!-- ═ MODAL MÉDICO ═ -->
-<div id="modal-medico" class="modal-bg" style="display:none">
-  <div class="modal" style="max-width:560px">
-    <div class="modal-hdr">
-      <span id="modal-med-titulo" style="font-size:15px;font-weight:800">Novo Médico</span>
-      <button class="modal-close" onclick="closeModal('modal-medico')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:12px;color:var(--text-muted);margin-bottom:16px;background:var(--off-white);padding:10px 12px;border-radius:8px">O e-mail e senha criam o login do médico. As demais informações aparecem no cabeçalho e rodapé das receitas impressas.</p>
-      <div class="form-grid form-grid-2">
-        <div class="form-group full"><div class="form-label">Nome completo *</div><input class="form-input" id="med-nome" placeholder="Dr(a). Nome Sobrenome"></div>
-        <div class="form-group"><div class="form-label">CRM *</div><input class="form-input" id="med-crm" placeholder="CRM/RS 00000"></div>
-        <div class="form-group"><div class="form-label">Especialidade *</div><input class="form-input" id="med-especialidade" placeholder="Ex: Cardiologista"></div>
-        <div class="form-group full"><div class="form-label">Endereço comercial</div><input class="form-input" id="med-endereco" placeholder="Rua, nº, sala, bairro, cidade/UF"></div>
-        <div class="form-group"><div class="form-label">Telefone comercial</div><input class="form-input" id="med-tel" placeholder="(00) 90000-0000" maxlength="16" oninput="maskTel(this)"></div>
-        <div class="form-group"><div class="form-label">E-mail (login) *</div><input class="form-input" id="med-email" type="email" placeholder="medico@email.com"></div>
-        <div class="form-group"><div class="form-label" id="med-pass-label">Senha (login) *</div><input class="form-input" id="med-pass" type="password" placeholder="Mínimo 6 caracteres"></div>
-      </div>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-medico')">Cancelar</button>
-      <button class="btn btn-blue" onclick="salvarMedico()">💾 Salvar Médico</button>
-    </div>
-  </div>
-</div>
-
-<!-- ═ MODAL EXCLUIR ═ -->
-<div id="modal-excluir" class="modal-bg" style="display:none">
-  <div class="modal" style="max-width:420px">
-    <div class="modal-hdr">
-      <span style="font-size:15px;font-weight:800;color:var(--red)">⚠️ Confirmar exclusão</span>
-      <button class="modal-close" onclick="closeModal('modal-excluir')">✕</button>
-    </div>
-    <div class="modal-body">
-      <p style="font-size:14px">Deseja excluir este paciente? Todas as anamneses, receitas e imagens serão removidas permanentemente.</p>
-    </div>
-    <div class="modal-footer">
-      <button class="btn btn-outline" onclick="closeModal('modal-excluir')">Cancelar</button>
-      <button class="btn btn-red" onclick="excluirPaciente()">🗑️ Excluir definitivamente</button>
+      <button class="modal-dismiss" id="modalDismiss">Continuar navegando no site</button>
     </div>
   </div>
 </div>
 
 <script>
-let SB=null,SESSION_USER=null,MEDICO_LOGADO=null;
-let PACIENTES=[],CURRENT_PAC=null;
-let ANAMNESES=[],RECEITAS=[],IMAGENS=[];
-let EDIT_PAC_ID=null,EDIT_MED_ID=null;
-let ANAM_TO_DEL=null,REC_TO_DEL=null,REC_VER_DATA=null;
-const BUCKET='paciente-imagens',LS='copasulmed_v2';
-
-function showToast(msg,tipo='ok'){const t=document.getElementById('toast');t.className='show '+(tipo==='ok'?'ok':tipo==='err'?'err':'inf');document.getElementById('toast-ico').textContent=tipo==='ok'?'✓':tipo==='err'?'✕':'ℹ';document.getElementById('toast-msg').textContent=msg;clearTimeout(t._t);t._t=setTimeout(()=>t.className='',3500);}
-function showOverlay(m='Carregando…'){document.getElementById('overlay-msg').textContent=m;document.getElementById('overlay').classList.add('show');}
-function hideOverlay(){document.getElementById('overlay').classList.remove('show');}
-function openModal(id){document.getElementById(id).style.display='flex';}
-function closeModal(id){document.getElementById(id).style.display='none';}
-function calcIdade(n){if(!n)return null;const d=new Date(n),h=new Date();let a=h.getFullYear()-d.getFullYear();if(h.getMonth()<d.getMonth()||(h.getMonth()===d.getMonth()&&h.getDate()<d.getDate()))a--;return a;}
-function fmtData(d){if(!d)return'—';const[y,m,dia]=(d.split('T')[0]).split('-');return`${dia}/${m}/${y}`;}
-function fmtDataHora(d){if(!d)return'';const dt=new Date(d);return dt.toLocaleDateString('pt-BR')+' '+dt.toLocaleTimeString('pt-BR',{hour:'2-digit',minute:'2-digit'});}
-function hoje(){return new Date().toISOString().split('T')[0];}
-function maskCPF(el){let v=el.value.replace(/\D/g,'');v=v.replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d)/,'$1.$2').replace(/(\d{3})(\d{1,2})$/,'$1-$2');el.value=v;}
-function maskTel(el){let v=el.value.replace(/\D/g,'');if(v.length<=10)v=v.replace(/(\d{2})(\d{4})(\d{0,4})/,'($1) $2-$3');else v=v.replace(/(\d{2})(\d{5})(\d{0,4})/,'($1) $2-$3');el.value=v.trim().replace(/-$/,'');}
-
-window.addEventListener('DOMContentLoaded',()=>{
-  const cfg=JSON.parse(localStorage.getItem(LS)||'{}');
-  if(cfg.url)document.getElementById('login-url').value=cfg.url;
-  if(cfg.key)document.getElementById('login-key').value=cfg.key;
-  if(cfg.email)document.getElementById('login-email').value=cfg.email;
-  const z=document.getElementById('upload-zone-drop');
-  if(z){z.addEventListener('dragover',e=>{e.preventDefault();z.style.borderColor='var(--green-mid)';});z.addEventListener('dragleave',()=>z.style.borderColor='');z.addEventListener('drop',e=>{e.preventDefault();z.style.borderColor='';uploadImagens(e.dataTransfer.files);});}
+/* ===== SCROLL SUAVE ===== */
+document.querySelectorAll('a[href^="#"]').forEach(a=>{
+  a.addEventListener('click',e=>{
+    const t=document.querySelector(a.getAttribute('href'));
+    if(t){ e.preventDefault(); t.scrollIntoView({behavior:'smooth'}); }
+  });
 });
 
-async function doLogin(){
-  const url=document.getElementById('login-url').value.trim();
-  const key=document.getElementById('login-key').value.trim();
-  const email=document.getElementById('login-email').value.trim();
-  const pass=document.getElementById('login-pass').value;
-  if(!url||!key||!email||!pass){showToast('Preencha todos os campos.','err');return;}
-  showOverlay('Conectando…');
-  try{
-    SB=supabase.createClient(url,key);
-    const{data,error}=await SB.auth.signInWithPassword({email,password:pass});
-    if(error)throw error;
-    SESSION_USER=data.user;
-    localStorage.setItem(LS,JSON.stringify({url,key,email}));
-    const{data:med}=await SB.from('medicos').select('*').eq('email',email).maybeSingle();
-    MEDICO_LOGADO=med||null;
-    document.getElementById('nav-avatar').textContent=(MEDICO_LOGADO?.nome||email)[0].toUpperCase();
-    document.getElementById('nav-nome-med').textContent=MEDICO_LOGADO?.nome||email;
-    document.getElementById('nav-crm-med').textContent=MEDICO_LOGADO?.crm?(MEDICO_LOGADO.crm+(MEDICO_LOGADO.especialidade?' · '+MEDICO_LOGADO.especialidade:'')):'';
-    document.getElementById('screen-login').classList.remove('active');
-    document.getElementById('screen-app').classList.add('active');
-    await carregarPacientes();
-  }catch(e){showToast(e.message||'Erro ao conectar','err');}
-  hideOverlay();
-}
-async function doLogout(){if(SB)await SB.auth.signOut();SB=null;SESSION_USER=null;MEDICO_LOGADO=null;PACIENTES=[];document.getElementById('screen-app').classList.remove('active');document.getElementById('screen-login').classList.add('active');}
+/* ===== MENU HAMBÚRGUER (MOBILE) ===== */
+const navToggle = document.getElementById('navToggle');
+const navLinks  = document.getElementById('navLinks');
+navToggle.addEventListener('click', ()=>{
+  navToggle.classList.toggle('open');
+  navLinks.classList.toggle('show');
+});
+/* fecha o menu ao clicar em um link */
+navLinks.querySelectorAll('a').forEach(a=>{
+  a.addEventListener('click', ()=>{
+    navToggle.classList.remove('open');
+    navLinks.classList.remove('show');
+  });
+});
 
-function navTo(v){
-  document.querySelectorAll('.sidebar-btn').forEach(b=>b.classList.remove('active'));
-  document.getElementById('sb-'+v)?.classList.add('active');
-  document.getElementById('view-lista').style.display=v==='pacientes'?'block':'none';
-  document.getElementById('view-ficha').style.display='none';
-  document.getElementById('view-medicos').style.display=v==='medicos'?'block':'none';
-  if(v==='medicos')carregarMedicos();
-}
-function voltarLista(){document.getElementById('view-ficha').style.display='none';document.getElementById('view-lista').style.display='block';CURRENT_PAC=null;}
-function mudarTab(t){['dados','anamnese','receita','imagens'].forEach(x=>{document.getElementById('tab-content-'+x).style.display=x===t?'block':'none';document.getElementById('tab-'+x).classList.toggle('active',x===t);});}
+/* ===== MODAL DE CAPTAÇÃO ===== */
+/* Aparece após 15s na página OU ao rolar 50% — apenas uma vez por sessão */
+const TEMPO_PARA_ABRIR = 15000;  /* 15 segundos */
+const ROLAGEM_PARA_ABRIR = 0.5;  /* 50% da página */
 
-async function carregarPacientes(){
-  showOverlay('Carregando pacientes…');
-  try{const{data,error}=await SB.from('pacientes').select('*').order('nome');if(error)throw error;PACIENTES=data||[];renderLista(PACIENTES);atualizarStats();}catch(e){showToast(e.message,'err');}
-  hideOverlay();
-}
-function atualizarStats(){
-  document.getElementById('stat-total').textContent=PACIENTES.length;
-  const mes=new Date().getMonth(),ano=new Date().getFullYear();
-  document.getElementById('stat-mes').textContent=PACIENTES.filter(p=>{const d=new Date(p.created_at);return d.getMonth()===mes&&d.getFullYear()===ano;}).length;
-  document.getElementById('sb-count-pac').textContent=PACIENTES.length;
-}
-function renderLista(lista){
-  const el=document.getElementById('patient-list'),empty=document.getElementById('empty-list');
-  if(!lista.length){el.innerHTML='';empty.style.display='block';return;}
-  empty.style.display='none';
-  el.innerHTML=lista.map(p=>{
-    const ini=(p.nome||'?').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-    const idade=p.data_nascimento?calcIdade(p.data_nascimento):'';
-    return`<div class="patient-card" onclick="abrirFicha('${p.id}')">
-      <div class="patient-avatar">${ini}</div>
-      <div class="patient-info">
-        <div class="patient-name">${p.nome||'—'}</div>
-        <div class="patient-meta">${idade?`<span>🎂 ${idade} anos</span>`:''}${p.sexo?`<span>👤 ${p.sexo}</span>`:''}${p.telefone?`<span>📱 ${p.telefone}</span>`:''}${p.cpf?`<span>🪪 ${p.cpf}</span>`:''}</div>
-        <div class="patient-tags">${p.alergias?`<span class="tag tag-red">⚠ Alergias</span>`:''}${p.convenio?`<span class="tag tag-blue">${p.convenio}</span>`:''}</div>
-      </div>
-    </div>`;
-  }).join('');
-}
-function filtrarPacientes(){const q=document.getElementById('search-input').value.toLowerCase().trim();renderLista(!q?PACIENTES:PACIENTES.filter(p=>(p.nome||'').toLowerCase().includes(q)||(p.cpf||'').includes(q)||(p.telefone||'').includes(q)));}
+const modal     = document.getElementById('agendaModal');
+const btnClose  = document.getElementById('modalClose');
+const btnDismiss= document.getElementById('modalDismiss');
+const btnWhats  = document.getElementById('modalWhats');
+let modalMostrado = false;
 
-async function abrirFicha(id){
-  showOverlay('Carregando ficha…');
-  CURRENT_PAC=PACIENTES.find(p=>p.id===id)||null;if(!CURRENT_PAC){hideOverlay();return;}
-  const[ra,rr,ri]=await Promise.all([SB.from('anamneses').select('*').eq('paciente_id',id).order('data_consulta',{ascending:false}),SB.from('receitas').select('*').eq('paciente_id',id).order('data_receita',{ascending:false}),SB.from('paciente_imagens').select('*').eq('paciente_id',id).order('created_at',{ascending:false})]);
-  ANAMNESES=ra.data||[];RECEITAS=rr.data||[];IMAGENS=ri.data||[];
-  renderFicha();
-  document.getElementById('view-lista').style.display='none';document.getElementById('view-ficha').style.display='block';mudarTab('dados');hideOverlay();
+function abrirModal(){
+  if(modalMostrado) return;
+  modal.classList.add('show');
+  modalMostrado = true;
+  clearTimeout(timerAbrir);
+  window.removeEventListener('scroll', onScroll);
 }
-function renderFicha(){
-  const p=CURRENT_PAC;
-  const ini=(p.nome||'?').split(' ').slice(0,2).map(w=>w[0]).join('').toUpperCase();
-  document.getElementById('ficha-avatar-big').textContent=ini;
-  document.getElementById('ficha-nome-display').textContent=p.nome||'—';
-  document.getElementById('ficha-meta-row').innerHTML=(p.data_nascimento?`<span>🎂 ${calcIdade(p.data_nascimento)} anos</span>`:'')+( p.sexo?`<span>👤 ${p.sexo}</span>`:'')+( p.telefone?`<span>📱 ${p.telefone}</span>`:'')+( p.convenio?`<span>🏥 ${p.convenio}</span>`:'');
-  let al='';if(p.alergias)p.alergias.split(',').forEach(a=>{if(a.trim())al+=`<span class="alert-tag alert-red">⚠ ${a.trim()}</span>`;});
-  document.getElementById('ficha-alertas').innerHTML=al?`<div><span style="font-size:11px;font-weight:700;color:var(--red);text-transform:uppercase">Alergias: </span>${al}</div>`:'';
-  document.getElementById('ficha-dados-id').innerHTML=renderCampos([{l:'Nome completo',v:p.nome},{l:'Data de nascimento',v:fmtData(p.data_nascimento)},{l:'Idade',v:p.data_nascimento?calcIdade(p.data_nascimento)+' anos':null},{l:'Sexo',v:p.sexo},{l:'CPF',v:p.cpf},{l:'RG',v:p.rg},{l:'Estado civil',v:p.estado_civil},{l:'Profissão',v:p.profissao},{l:'Convênio',v:p.convenio},{l:'Nº carteirinha',v:p.num_carteirinha}]);
-  document.getElementById('ficha-dados-contato').innerHTML=renderCampos([{l:'Telefone',v:p.telefone},{l:'Telefone 2',v:p.telefone2},{l:'E-mail',v:p.email},{l:'Responsável',v:p.responsavel},{l:'Endereço',v:p.endereco,full:true},{l:'Cidade',v:p.cidade},{l:'UF',v:p.uf}]);
-  document.getElementById('ficha-dados-clinicos').innerHTML=renderCampos([{l:'Tipo sanguíneo',v:p.tipo_sanguineo},{l:'Altura',v:p.altura?p.altura+' cm':null},{l:'Peso',v:p.peso?p.peso+' kg':null},{l:'Alergias',v:p.alergias,full:true},{l:'Medicamentos em uso',v:p.medicamentos,full:true},{l:'Observações',v:p.observacoes,full:true}]);
-  document.getElementById('badge-anam').textContent=ANAMNESES.length;document.getElementById('badge-rec').textContent=RECEITAS.length;document.getElementById('badge-imgs').textContent=IMAGENS.length;document.getElementById('stat-anam').textContent=ANAMNESES.length;
-  renderAnamneses();renderReceitas();renderImagens();
-}
-function renderCampos(campos){return campos.map(c=>`<div class="form-group${c.full?' full':''}"><div class="form-label">${c.l}</div><div style="padding:9px 12px;background:var(--off-white);border:1px solid var(--border);border-radius:8px;font-size:13px;color:${c.v?'var(--text)':'var(--text-muted)'};min-height:38px;white-space:pre-wrap">${c.v||'—'}</div></div>`).join('');}
+function fecharModal(){ modal.classList.remove('show'); }
 
-function openNovoModal(){EDIT_PAC_ID=null;document.getElementById('modal-pac-titulo').textContent='Novo Paciente';['nome','nasc','sexo','cpf','rg','estado-civil','profissao','convenio','carteirinha','tel','tel2','email','responsavel','endereco','cidade','uf','tipo-sang','altura','peso','alergias','medicamentos','obs'].forEach(f=>{const el=document.getElementById('pac-'+f);if(el)el.value='';});openModal('modal-paciente');}
-function abrirEditarPaciente(){if(!CURRENT_PAC)return;EDIT_PAC_ID=CURRENT_PAC.id;document.getElementById('modal-pac-titulo').textContent='Editar Paciente';const p=CURRENT_PAC,s=(id,v)=>{const el=document.getElementById(id);if(el&&v!=null)el.value=v;};s('pac-nome',p.nome);s('pac-nasc',p.data_nascimento);s('pac-sexo',p.sexo);s('pac-cpf',p.cpf);s('pac-rg',p.rg);s('pac-estado-civil',p.estado_civil);s('pac-profissao',p.profissao);s('pac-convenio',p.convenio);s('pac-carteirinha',p.num_carteirinha);s('pac-tel',p.telefone);s('pac-tel2',p.telefone2);s('pac-email',p.email);s('pac-responsavel',p.responsavel);s('pac-endereco',p.endereco);s('pac-cidade',p.cidade);s('pac-uf',p.uf);s('pac-tipo-sang',p.tipo_sanguineo);s('pac-altura',p.altura);s('pac-peso',p.peso);s('pac-alergias',p.alergias);s('pac-medicamentos',p.medicamentos);s('pac-obs',p.observacoes);openModal('modal-paciente');}
-async function salvarPaciente(){
-  const nome=document.getElementById('pac-nome').value.trim();if(!nome){showToast('Nome é obrigatório.','err');return;}
-  const payload={nome,data_nascimento:document.getElementById('pac-nasc').value||null,sexo:document.getElementById('pac-sexo').value||null,cpf:document.getElementById('pac-cpf').value||null,rg:document.getElementById('pac-rg').value||null,estado_civil:document.getElementById('pac-estado-civil').value||null,profissao:document.getElementById('pac-profissao').value||null,convenio:document.getElementById('pac-convenio').value||null,num_carteirinha:document.getElementById('pac-carteirinha').value||null,telefone:document.getElementById('pac-tel').value||null,telefone2:document.getElementById('pac-tel2').value||null,email:document.getElementById('pac-email').value||null,responsavel:document.getElementById('pac-responsavel').value||null,endereco:document.getElementById('pac-endereco').value||null,cidade:document.getElementById('pac-cidade').value||null,uf:document.getElementById('pac-uf').value||null,tipo_sanguineo:document.getElementById('pac-tipo-sang').value||null,altura:document.getElementById('pac-altura').value||null,peso:document.getElementById('pac-peso').value||null,alergias:document.getElementById('pac-alergias').value||null,medicamentos:document.getElementById('pac-medicamentos').value||null,observacoes:document.getElementById('pac-obs').value||null};
-  showOverlay('Salvando…');
-  try{let res;if(EDIT_PAC_ID)res=await SB.from('pacientes').update(payload).eq('id',EDIT_PAC_ID).select().single();else res=await SB.from('pacientes').insert(payload).select().single();if(res.error)throw res.error;closeModal('modal-paciente');showToast(EDIT_PAC_ID?'Paciente atualizado!':'Paciente cadastrado!');await carregarPacientes();if(EDIT_PAC_ID){CURRENT_PAC=PACIENTES.find(p=>p.id===EDIT_PAC_ID)||null;if(CURRENT_PAC)renderFicha();}}catch(e){showToast(e.message,'err');}
-  hideOverlay();
-}
+/* gatilho por tempo */
+const timerAbrir = setTimeout(abrirModal, TEMPO_PARA_ABRIR);
 
-function openAnamneseModal(){document.getElementById('anam-data').value=hoje();document.getElementById('anam-medico').value=MEDICO_LOGADO?.nome||SESSION_USER?.email||'';document.getElementById('anam-tipo').value='Consulta';['pa','fc','temp','peso','sat','texto'].forEach(f=>{const el=document.getElementById('anam-'+f);if(el)el.value='';});openModal('modal-anamnese');}
-function renderAnamneses(){
-  const el=document.getElementById('anam-list'),empty=document.getElementById('anam-empty');
-  if(!ANAMNESES.length){el.innerHTML='';empty.style.display='block';return;}
-  empty.style.display='none';
-  el.innerHTML=ANAMNESES.map(a=>`<div class="anam-entry" onclick="verAnamnese('${a.id}')">
-    <div class="anam-entry-hdr"><div><div class="anam-entry-date">📅 ${fmtData(a.data_consulta)}</div><div style="font-size:12px;color:var(--text-muted)">${a.medico||'—'}</div></div>
-    <div style="display:flex;gap:6px"><span class="tag tag-green">${a.tipo||'Consulta'}</span>${a.pressao_arterial?`<span class="tag tag-amber">PA: ${a.pressao_arterial}</span>`:''}</div></div>
-    <div class="anam-entry-preview">${(a.texto||'').substring(0,140)+(a.texto?.length>140?'…':'')||'<em style="color:var(--text-muted)">Sem anotações</em>'}</div>
-  </div>`).join('');
+/* gatilho por rolagem (50% da página) */
+function onScroll(){
+  const total = document.body.scrollHeight - window.innerHeight;
+  if(total > 0 && (window.scrollY / total) >= ROLAGEM_PARA_ABRIR) abrirModal();
 }
-async function salvarAnamnese(){
-  const data=document.getElementById('anam-data').value;if(!data){showToast('Data é obrigatória.','err');return;}
-  const payload={paciente_id:CURRENT_PAC.id,data_consulta:data,medico:document.getElementById('anam-medico').value||null,tipo:document.getElementById('anam-tipo').value||'Consulta',pressao_arterial:document.getElementById('anam-pa').value||null,frequencia_cardiaca:document.getElementById('anam-fc').value||null,temperatura:document.getElementById('anam-temp').value||null,peso_consulta:document.getElementById('anam-peso').value||null,saturacao:document.getElementById('anam-sat').value||null,texto:document.getElementById('anam-texto').value||null};
-  showOverlay('Salvando…');
-  try{const{data:res,error}=await SB.from('anamneses').insert(payload).select().single();if(error)throw error;closeModal('modal-anamnese');ANAMNESES.unshift(res);renderAnamneses();document.getElementById('badge-anam').textContent=ANAMNESES.length;showToast('Consulta registrada!');}catch(e){showToast(e.message,'err');}
-  hideOverlay();
-}
-function verAnamnese(id){
-  const a=ANAMNESES.find(x=>x.id===id);if(!a)return;ANAM_TO_DEL=id;
-  document.getElementById('ver-anam-titulo').textContent='Consulta — '+fmtData(a.data_consulta);
-  const sinais=[a.pressao_arterial&&`PA: ${a.pressao_arterial}`,a.frequencia_cardiaca&&`FC: ${a.frequencia_cardiaca} bpm`,a.temperatura&&`T: ${a.temperatura}°C`,a.saturacao&&`SpO₂: ${a.saturacao}%`,a.peso_consulta&&`Peso: ${a.peso_consulta} kg`].filter(Boolean);
-  document.getElementById('ver-anam-body').innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"><span class="tag tag-green">${a.tipo||'Consulta'}</span>${a.medico?`<span class="tag tag-blue">👨‍⚕️ ${a.medico}</span>`:''}${sinais.map(s=>`<span class="alert-tag alert-amber">${s}</span>`).join('')}</div><div style="white-space:pre-wrap;font-size:13px;color:var(--text);line-height:1.8;background:var(--off-white);border-radius:8px;padding:16px">${a.texto||'Sem anotações.'}</div>`;
-  openModal('modal-ver-anam');
-}
-async function excluirAnamnese(){if(!ANAM_TO_DEL)return;showOverlay('Excluindo…');try{const{error}=await SB.from('anamneses').delete().eq('id',ANAM_TO_DEL);if(error)throw error;ANAMNESES=ANAMNESES.filter(a=>a.id!==ANAM_TO_DEL);renderAnamneses();document.getElementById('badge-anam').textContent=ANAMNESES.length;closeModal('modal-ver-anam');showToast('Consulta excluída.');}catch(e){showToast(e.message,'err');}ANAM_TO_DEL=null;hideOverlay();}
+window.addEventListener('scroll', onScroll, {passive:true});
 
-let MED_ROWS=[];
-function openReceitaModal(){document.getElementById('rec-data').value=hoje();document.getElementById('rec-medico').value=MEDICO_LOGADO?.nome||SESSION_USER?.email||'';document.getElementById('rec-obs').value='';MED_ROWS=[];document.getElementById('meds-container').innerHTML='';addMedRow();openModal('modal-receita');}
-function addMedRow(){
-  const id='med_'+Date.now();MED_ROWS.push(id);
-  const div=document.createElement('div');div.id=id;div.style.cssText='display:grid;grid-template-columns:1fr 130px 1fr 36px;gap:8px;align-items:center;margin-bottom:8px;padding:8px 0;border-bottom:1px solid var(--border);';
-  div.innerHTML=`<input class="form-input" placeholder="Nome do medicamento" style="font-size:13px" data-field="nome"><input class="form-input" placeholder="Ex: 500mg" style="font-size:13px" data-field="dose"><input class="form-input" placeholder="Ex: 1 cp 8/8h por 7 dias" style="font-size:13px" data-field="posologia"><button onclick="removeMedRow('${id}')" style="width:32px;height:32px;border-radius:6px;border:none;background:#fff0ee;color:var(--red);cursor:pointer;font-size:18px;display:flex;align-items:center;justify-content:center;flex-shrink:0">×</button>`;
-  document.getElementById('meds-container').appendChild(div);
-}
-function removeMedRow(id){if(MED_ROWS.length<=1){showToast('Deve ter pelo menos 1 medicamento.','inf');return;}document.getElementById(id)?.remove();MED_ROWS=MED_ROWS.filter(r=>r!==id);}
-function coletarMeds(){return MED_ROWS.map(id=>{const el=document.getElementById(id);if(!el)return null;return{nome:el.querySelector('[data-field="nome"]').value.trim(),dose:el.querySelector('[data-field="dose"]').value.trim(),posologia:el.querySelector('[data-field="posologia"]').value.trim()};}).filter(m=>m&&m.nome);}
-async function salvarReceita(){
-  const meds=coletarMeds();if(!meds.length){showToast('Adicione pelo menos 1 medicamento.','err');return;}
-  const payload={paciente_id:CURRENT_PAC.id,data_receita:document.getElementById('rec-data').value,medico:document.getElementById('rec-medico').value||null,medico_id:MEDICO_LOGADO?.id||null,medicamentos:JSON.stringify(meds),observacoes:document.getElementById('rec-obs').value||null};
-  showOverlay('Salvando receita…');
-  try{const{data,error}=await SB.from('receitas').insert(payload).select().single();if(error)throw error;closeModal('modal-receita');RECEITAS.unshift(data);renderReceitas();document.getElementById('badge-rec').textContent=RECEITAS.length;showToast('Receita salva!');}catch(e){showToast(e.message,'err');}
-  hideOverlay();
-}
-function renderReceitas(){
-  const el=document.getElementById('receita-list'),empty=document.getElementById('receita-empty');
-  if(!RECEITAS.length){el.innerHTML='';empty.style.display='block';return;}
-  empty.style.display='none';
-  el.innerHTML=RECEITAS.map(r=>{let meds=[];try{meds=JSON.parse(r.medicamentos||'[]');}catch(e){}
-    return`<div class="receita-entry" onclick="verReceita('${r.id}')">
-      <div class="receita-entry-hdr"><div><div class="receita-entry-date">💊 ${fmtData(r.data_receita)}</div><div style="font-size:12px;color:var(--text-muted)">${r.medico||'—'}</div></div><span class="tag tag-blue">${meds.length} medicamento(s)</span></div>
-      <div style="padding:10px 16px;font-size:12px;color:var(--text-mid)">${meds.slice(0,3).map(m=>m.nome+(m.dose?' '+m.dose:'')).join(' · ')}${meds.length>3?' · …':''}</div>
-    </div>`;
-  }).join('');
-}
-function verReceita(id){
-  const r=RECEITAS.find(x=>x.id===id);if(!r)return;REC_TO_DEL=id;REC_VER_DATA=r;
-  let meds=[];try{meds=JSON.parse(r.medicamentos||'[]');}catch(e){}
-  document.getElementById('ver-rec-titulo').textContent='Receita — '+fmtData(r.data_receita);
-  document.getElementById('ver-rec-body').innerHTML=`<div style="display:flex;gap:8px;flex-wrap:wrap;margin-bottom:16px"><span class="tag tag-blue">📅 ${fmtData(r.data_receita)}</span>${r.medico?`<span class="tag tag-green">👨‍⚕️ ${r.medico}</span>`:''}</div>
-    <table style="width:100%;border-collapse:collapse;font-size:13px"><thead><tr style="background:var(--green-pale)"><th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--green);border-bottom:2px solid var(--border)">#</th><th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--green);border-bottom:2px solid var(--border)">MEDICAMENTO</th><th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--green);border-bottom:2px solid var(--border)">DOSE</th><th style="padding:8px 12px;text-align:left;font-size:11px;color:var(--green);border-bottom:2px solid var(--border)">POSOLOGIA</th></tr></thead>
-    <tbody>${meds.map((m,i)=>`<tr style="border-bottom:1px solid var(--border)"><td style="padding:10px 12px;color:var(--text-muted);font-weight:700">${i+1}</td><td style="padding:10px 12px;font-weight:700">${m.nome}</td><td style="padding:10px 12px">${m.dose||'—'}</td><td style="padding:10px 12px">${m.posologia||'—'}</td></tr>`).join('')}</tbody></table>
-    ${r.observacoes?`<div style="margin-top:14px;padding:12px;background:var(--off-white);border-radius:8px;font-size:13px"><strong>Observações:</strong> ${r.observacoes}</div>`:''}`;
-  openModal('modal-ver-receita');
-}
-async function excluirReceita(){if(!REC_TO_DEL)return;showOverlay('Excluindo…');try{const{error}=await SB.from('receitas').delete().eq('id',REC_TO_DEL);if(error)throw error;RECEITAS=RECEITAS.filter(r=>r.id!==REC_TO_DEL);renderReceitas();document.getElementById('badge-rec').textContent=RECEITAS.length;closeModal('modal-ver-receita');showToast('Receita excluída.');}catch(e){showToast(e.message,'err');}REC_TO_DEL=null;hideOverlay();}
-
-function imprimirReceita(){
-  if(!REC_VER_DATA)return;
-  const r=REC_VER_DATA,p=CURRENT_PAC,med=MEDICO_LOGADO;
-  let meds=[];try{meds=JSON.parse(r.medicamentos||'[]');}catch(e){}
-  const pa=document.getElementById('print-area');
-  const crmTxt=med?.crm?`CRM: ${med.crm}`:(r.medico||'');
-  pa.innerHTML=`
-    <div class="ph">
-      <h1>${med?.nome||r.medico||'Médico'}</h1>
-      ${med?.especialidade?`<div class="ph-esp">${med.especialidade}</div>`:''}
-      ${med?.crm?`<div class="ph-crm">CRM: ${med.crm}</div>`:''}
-    </div>
-    <div class="pp">
-      <h3>${p?.nome||'—'}</h3>
-      <span>${p?.data_nascimento?`Nasc.: ${fmtData(p.data_nascimento)} · ${calcIdade(p.data_nascimento)} anos`:''}${p?.cpf?' &nbsp;·&nbsp; CPF: '+p.cpf:''}</span>
-    </div>
-    <div class="pm">
-      <div class="pm-title">Prescrição — ${fmtData(r.data_receita)}</div>
-      ${meds.map((m,i)=>`
-        <div class="pm-item">
-          <span class="pm-num">${i+1}.</span>
-          <span class="pm-med">&nbsp;${m.nome}${m.dose?' '+m.dose:''}</span>
-          ${m.posologia?`<span class="pm-posologia">— ${m.posologia}</span>`:''}
-        </div>`).join('')}
-      ${r.observacoes?`<div class="pobs">${r.observacoes}</div>`:''}
-    </div>
-    <div class="psign">
-      <div class="sl"></div>
-      <div class="ps-nome">${med?.nome||r.medico||''}</div>
-      ${med?.crm?`<div class="ps-crm">CRM: ${med.crm}</div>`:''}
-    </div>
-    <div class="pfoot">
-      <span>${med?.endereco||''}</span>
-      <span>${med?.telefone||''}</span>
-    </div>`;
-  pa.style.display='block';window.print();pa.style.display='none';
-}
-
-async function uploadImagens(files){
-  if(!files||!files.length||!CURRENT_PAC)return;showOverlay('Enviando imagens…');let ok=0,err=0;
-  for(const file of files){try{const ext=file.name.split('.').pop();const path=`${CURRENT_PAC.id}/${Date.now()}_${Math.random().toString(36).slice(2)}.${ext}`;const{error:upErr}=await SB.storage.from(BUCKET).upload(path,file,{upsert:false});if(upErr)throw upErr;const{data:urlData}=SB.storage.from(BUCKET).getPublicUrl(path);const{error:dbErr}=await SB.from('paciente_imagens').insert({paciente_id:CURRENT_PAC.id,nome:file.name,url:urlData.publicUrl,path,tipo:file.type,tamanho:file.size});if(dbErr)throw dbErr;ok++;}catch(e){err++;console.error(e);}}
-  const{data:ri}=await SB.from('paciente_imagens').select('*').eq('paciente_id',CURRENT_PAC.id).order('created_at',{ascending:false});
-  IMAGENS=ri||[];renderImagens();document.getElementById('badge-imgs').textContent=IMAGENS.length;hideOverlay();
-  if(ok)showToast(`${ok} imagem(ns) enviada(s)!`);if(err)showToast(`${err} erro(s) no upload.`,'err');
-  document.getElementById('file-upload-hidden').value='';
-}
-function renderImagens(){
-  const el=document.getElementById('imgs-grid'),empty=document.getElementById('imgs-empty');
-  if(!IMAGENS.length){el.innerHTML='';empty.style.display='block';return;}
-  empty.style.display='none';
-  el.innerHTML=IMAGENS.map(img=>{const isPDF=img.tipo&&img.tipo.includes('pdf');
-    return`<div class="img-card" onclick="verImagem('${img.id}','${img.url}','${img.tipo||''}')">
-      ${isPDF?`<div style="height:120px;background:#f3f4f6;display:flex;align-items:center;justify-content:center;font-size:40px">📄</div>`:`<img src="${img.url}" alt="${img.nome}">`}
-      <div class="img-card-info"><div class="img-card-name">${img.nome||'Imagem'}</div><div class="img-card-date">${fmtDataHora(img.created_at)}</div><span class="tag ${isPDF?'tag-amber':'tag-green'}" style="font-size:9px;display:inline-block;margin-top:4px">${isPDF?'PDF':'IMG'}</span></div>
-    </div>`;
-  }).join('');
-}
-function verImagem(id,url,tipo){if(tipo.includes('pdf')){window.open(url,'_blank');return;}document.getElementById('lightbox-img').src=url;document.getElementById('lightbox').classList.add('show');}
-function closeLightbox(){document.getElementById('lightbox').classList.remove('show');document.getElementById('lightbox-img').src='';}
-
-async function excluirPaciente(){
-  if(!CURRENT_PAC)return;showOverlay('Excluindo…');
-  try{for(const img of IMAGENS){if(img.path)await SB.storage.from(BUCKET).remove([img.path]);}await SB.from('paciente_imagens').delete().eq('paciente_id',CURRENT_PAC.id);await SB.from('anamneses').delete().eq('paciente_id',CURRENT_PAC.id);await SB.from('receitas').delete().eq('paciente_id',CURRENT_PAC.id);const{error}=await SB.from('pacientes').delete().eq('id',CURRENT_PAC.id);if(error)throw error;closeModal('modal-excluir');showToast('Paciente excluído.');await carregarPacientes();voltarLista();}catch(e){showToast(e.message,'err');}
-  hideOverlay();
-}
-function imprimirFicha(){window.print();}
-
-async function carregarMedicos(){
-  showOverlay('Carregando médicos…');
-  try{const{data,error}=await SB.from('medicos').select('*').order('nome');if(error)throw error;renderMedicos(data||[]);}catch(e){showToast(e.message,'err');}
-  hideOverlay();
-}
-function renderMedicos(lista){
-  const el=document.getElementById('medicos-list'),empty=document.getElementById('medicos-empty');
-  if(!lista.length){el.innerHTML='';empty.style.display='block';return;}
-  empty.style.display='none';
-  el.innerHTML=lista.map(m=>`<div class="medico-card">
-    <div class="medico-avatar">${(m.nome||'M')[0].toUpperCase()}</div>
-    <div style="flex:1"><div style="font-size:15px;font-weight:800">${m.nome||'—'}</div>
-    <div style="font-size:12px;color:var(--text-muted);margin-top:3px">${m.crm||''}${m.especialidade?' · '+m.especialidade:''}</div>
-    <div style="font-size:12px;color:var(--text-muted);margin-top:2px">${m.email||''}${m.telefone?' · '+m.telefone:''}</div>
-    ${m.endereco?`<div style="font-size:12px;color:var(--text-muted);margin-top:2px">📍 ${m.endereco}</div>`:''}</div>
-    <div style="display:flex;gap:6px">
-      <button class="btn btn-outline btn-sm" onclick="editarMedico('${m.id}')">✏️</button>
-      <button class="btn btn-red btn-sm" onclick="confirmarExcluirMedico('${m.id}','${(m.nome||'').replace(/'/g,"\\'")}')">🗑️</button>
-    </div>
-  </div>`).join('');
-}
-function openMedicoModal(){EDIT_MED_ID=null;document.getElementById('modal-med-titulo').textContent='Novo Médico';document.getElementById('med-pass-label').textContent='Senha (login) *';['nome','crm','especialidade','endereco','tel','email','pass'].forEach(f=>{const el=document.getElementById('med-'+f);if(el)el.value='';});openModal('modal-medico');}
-async function editarMedico(id){const{data,error}=await SB.from('medicos').select('*').eq('id',id).single();if(error){showToast('Erro ao carregar médico.','err');return;}EDIT_MED_ID=id;document.getElementById('modal-med-titulo').textContent='Editar Médico';document.getElementById('med-pass-label').textContent='Nova senha (deixe em branco para manter)';const s=(f,v)=>{const el=document.getElementById('med-'+f);if(el&&v!=null)el.value=v;};s('nome',data.nome);s('crm',data.crm);s('especialidade',data.especialidade);s('endereco',data.endereco);s('tel',data.telefone);s('email',data.email);document.getElementById('med-pass').value='';openModal('modal-medico');}
-async function salvarMedico(){
-  const nome=document.getElementById('med-nome').value.trim();const crm=document.getElementById('med-crm').value.trim();const email=document.getElementById('med-email').value.trim();const pass=document.getElementById('med-pass').value;
-  if(!nome||!crm||!email){showToast('Nome, CRM e e-mail são obrigatórios.','err');return;}
-  if(!EDIT_MED_ID&&!pass){showToast('Senha é obrigatória para novo médico.','err');return;}
-  showOverlay('Salvando médico…');
-  try{
-    if(!EDIT_MED_ID&&pass){const cfg=JSON.parse(localStorage.getItem(LS)||'{}');const sbA=supabase.createClient(cfg.url,cfg.key);const{error:authErr}=await sbA.auth.signUp({email,password:pass});if(authErr&&!authErr.message.toLowerCase().includes('already'))throw authErr;}
-    const payload={nome,crm,especialidade:document.getElementById('med-especialidade').value||null,endereco:document.getElementById('med-endereco').value||null,telefone:document.getElementById('med-tel').value||null,email};
-    let res;if(EDIT_MED_ID)res=await SB.from('medicos').update(payload).eq('id',EDIT_MED_ID).select().single();else res=await SB.from('medicos').insert(payload).select().single();
-    if(res.error)throw res.error;closeModal('modal-medico');showToast(EDIT_MED_ID?'Médico atualizado!':'Médico cadastrado!');await carregarMedicos();
-  }catch(e){showToast(e.message,'err');}
-  hideOverlay();
-}
-async function confirmarExcluirMedico(id,nome){if(!confirm(`Excluir o médico "${nome}"?`))return;showOverlay('Excluindo…');try{const{error}=await SB.from('medicos').delete().eq('id',id);if(error)throw error;showToast('Médico excluído.');await carregarMedicos();}catch(e){showToast(e.message,'err');}hideOverlay();}
-
-document.addEventListener('keydown',e=>{if(e.key==='Escape'){['modal-paciente','modal-anamnese','modal-receita','modal-excluir','modal-ver-anam','modal-ver-receita','modal-medico'].forEach(closeModal);closeLightbox();}});
-document.querySelectorAll('.modal-bg').forEach(bg=>{bg.addEventListener('click',e=>{if(e.target===bg)bg.style.display='none';});});
+/* fechar */
+btnClose.addEventListener('click', fecharModal);
+btnDismiss.addEventListener('click', fecharModal);
+modal.addEventListener('click', e=>{ if(e.target===modal) fecharModal(); });
+btnWhats.addEventListener('click', fecharModal);
 </script>
-
-<!--
-═══════════════════════════════════════════════════════════
-  SQL PARA EXECUTAR NO SUPABASE SQL EDITOR
-  (execute bloco por bloco)
-═══════════════════════════════════════════════════════════
-
--- 1. Tabela de médicos
-create table medicos (
-  id uuid default gen_random_uuid() primary key,
-  created_at timestamptz default now(),
-  nome text not null,
-  crm text,
-  especialidade text,
-  endereco text,
-  telefone text,
-  email text
-);
-
--- 2. Tabela de receitas
-create table receitas (
-  id uuid default gen_random_uuid() primary key,
-  created_at timestamptz default now(),
-  paciente_id uuid references pacientes(id) on delete cascade,
-  data_receita date not null,
-  medico text,
-  medico_id uuid references medicos(id) on delete set null,
-  medicamentos text,
-  observacoes text
-);
-
--- 3. Adicionar coluna texto na anamnese (se já existir a tabela)
-alter table anamneses add column if not exists texto text;
-
--- 4. RLS para novas tabelas
-alter table medicos enable row level security;
-alter table receitas enable row level security;
-
-create policy "auth_all_medicos" on medicos
-  for all using (auth.role() = 'authenticated');
-
-create policy "auth_all_receitas" on receitas
-  for all using (auth.role() = 'authenticated');
-
-═══════════════════════════════════════════════════════════
--->
 </body>
 </html>
