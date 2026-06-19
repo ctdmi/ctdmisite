@@ -10,7 +10,7 @@
 <meta name="keywords" content="angiologista no Méier, cirurgia vascular Zona Norte, eco doppler no Méier, tratamento de varizes Rio de Janeiro, angiologia RJ, cirurgião vascular Méier">
 <meta name="author" content="C.T.D.M.I. – Angiologia e Cirurgia Vascular">
 <meta name="robots" content="index, follow">
-<link rel="canonical" href="https://ctdmi.github.io/copasulmed/">
+<link rel="canonical" href="https://www.ctdmi.com.br/">
 
 <!-- SEO Local (Geo) -->
 <meta name="geo.region" content="BR-RJ">
@@ -23,7 +23,7 @@
 <meta property="og:title" content="Angiologista no Méier | C.T.D.M.I. – Cirurgia Vascular e Eco Doppler">
 <meta property="og:description" content="Dr. Hugnei Ferro – Angiologia e Cirurgia Vascular no Méier, Zona Norte do Rio. Eco Doppler, varizes e tratamento minimamente invasivo. Agende sua consulta.">
 <meta property="og:locale" content="pt_BR">
-<meta property="og:url" content="https://ctdmi.github.io/copasulmed/">
+<meta property="og:url" content="https://www.ctdmi.com.br/">
 
 <!-- Dados Estruturados: MedicalBusiness -->
 <script type="application/ld+json">
@@ -32,7 +32,7 @@
   "@type": "MedicalBusiness",
   "name": "C.T.D.M.I. – Angiologia e Cirurgia Vascular",
   "description": "Clínica de Angiologia e Cirurgia Vascular no Méier, Zona Norte do Rio de Janeiro. Eco Doppler, tratamento de varizes e procedimentos minimamente invasivos com o Dr. Hugnei Ferro.",
-  "url": "https://ctdmi.github.io/copasulmed/",
+  "url": "https://www.ctdmi.com.br/",
   "telephone": "+55-21-3822-1519",
   "priceRange": "$$",
   "identifier": "CRM 11.1260-0",
@@ -237,6 +237,32 @@
   .reembolso-text h3{font-family:'Fraunces',serif;font-size:1.4rem;font-weight:600;margin-bottom:8px}
   .reembolso-text p{color:rgba(255,255,255,0.82);font-size:15px;line-height:1.7;text-align:justify;text-justify:inter-word}
 
+  /* AVALIAÇÕES */
+  .avaliacoes{background:var(--bg-soft)}
+  .av-header{display:flex;flex-direction:column;align-items:center;gap:14px}
+  .av-stars{display:flex;gap:4px}
+  .av-stars svg{width:24px;height:24px;fill:var(--gold)}
+  .av-score{display:flex;align-items:baseline;gap:8px;justify-content:center}
+  .av-score strong{font-family:'Fraunces',serif;font-size:2rem;color:var(--ink);font-weight:600}
+  .av-score span{color:var(--muted);font-size:14.5px}
+  .av-grid{display:grid;grid-template-columns:repeat(auto-fit,minmax(280px,1fr));gap:22px;margin-top:48px}
+  .av-card{background:#fff;border:1px solid var(--line);border-radius:20px;padding:28px 26px;display:flex;flex-direction:column;gap:14px}
+  .av-card .av-card-stars{display:flex;gap:3px}
+  .av-card .av-card-stars svg{width:16px;height:16px;fill:var(--gold)}
+  .av-quote{color:var(--ink);font-size:14.5px;line-height:1.7;flex:1}
+  .av-author{display:flex;align-items:center;gap:10px;margin-top:4px}
+  .av-avatar{width:36px;height:36px;border-radius:50%;background:var(--teal-soft);color:var(--teal);font-family:'Fraunces',serif;font-weight:600;font-size:14px;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .av-author strong{font-size:13.5px;color:var(--ink);display:block}
+  .av-author span{font-size:12px;color:var(--muted)}
+  .av-cta{text-align:center;margin-top:40px}
+  .av-cta-btn{display:inline-flex;align-items:center;gap:10px;background:#fff;border:1.5px solid var(--line);color:var(--ink);padding:14px 28px;border-radius:100px;font-weight:700;font-size:15px;text-decoration:none;transition:all .2s}
+  .av-cta-btn:hover{border-color:var(--gold);box-shadow:0 8px 24px rgba(227,169,44,0.18);transform:translateY(-2px)}
+  .av-cta-btn svg{width:20px;height:20px}
+
+  /* MAPA */
+  .mapa-wrap{margin-top:48px;border-radius:24px;overflow:hidden;border:1px solid var(--line);box-shadow:0 18px 50px rgba(6,18,54,0.07)}
+  .mapa-wrap iframe{display:block;width:100%;height:380px;border:0}
+
   /* CONTATO */
   .contato{background:var(--bg-soft)}
   .contato-inner{display:grid;grid-template-columns:1fr 1fr;gap:56px;align-items:start;margin-top:56px}
@@ -358,6 +384,7 @@
       <li><a href="#exames">Exames</a></li>
       <li><a href="https://ctdmi.github.io/laudos/paciente.html" target="_blank" rel="noopener">Resultado de Exames</a></li>
       <li><a href="#convenios">Convênios</a></li>
+      <li><a href="#avaliacoes">Avaliações</a></li>
       <li><a href="#contato">Contato</a></li>
     </ul>
     <a href="#agendamento" class="nav-cta">Agendar</a>
@@ -445,7 +472,7 @@
           <!-- Widget oficial Doctoralia – Dr. Hugnei Ferro -->
           <a id="zl-url" class="zl-url" href="https://www.doctoralia.com.br/hugnei-ferro/cirurgiao-vascular-angiologista/duque-de-caxias" rel="nofollow" data-zlw-doctor="hugnei-ferro" data-zlw-type="big_with_calendar" data-zlw-opinion="false" data-zlw-hide-branding="true" data-zlw-saas-only="true" data-zlw-a11y-title="Widget de marcação de consultas médicas">Marque uma consulta</a>
           <script>!function($_x,_s,id){var js,fjs=$_x.getElementsByTagName(_s)[0];if(!$_x.getElementById(id)){js = $_x.createElement(_s);js.id = id;js.src = "//platform.docplanner.com/js/widget.js";fjs.parentNode.insertBefore(js,fjs);}}(document,"script","zl-widget-s");</script>
-          <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta." class="ta-whats">
+          <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20com%20o%20Dr.%20Hugnei%20no%20C.T.D.M.I.%20do%20Méier" class="ta-whats">
             <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
             Prefere o WhatsApp? Agende aqui
           </a>
@@ -587,7 +614,7 @@
       <h3>Agende sua consulta</h3>
       <p>Entre em contato pelo WhatsApp ou telefone para marcar sua consulta ou exame. Será um prazer cuidar de você.</p>
       <div class="cta-btns">
-        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta." class="cta-btn whats">
+        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20com%20o%20Dr.%20Hugnei%20no%20C.T.D.M.I.%20do%20Méier" class="cta-btn whats">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
           Agendar pelo WhatsApp
         </a>
@@ -596,6 +623,87 @@
           Ligar: (21) 3822-1519
         </a>
       </div>
+    </div>
+  </div>
+</section>
+
+<!-- AVALIAÇÕES -->
+<section class="avaliacoes" id="avaliacoes">
+  <div class="wrap">
+    <div class="av-header center">
+      <div class="section-tag">Quem já passou por aqui</div>
+      <h2 class="section-title">Avaliações de Pacientes</h2>
+      <div class="av-stars">
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+        <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+      </div>
+      <div class="av-score">
+        <strong>4,8 / 5</strong>
+        <span>· baseado em 83 avaliações no Google</span>
+      </div>
+    </div>
+
+    <div class="av-grid">
+      <!-- DEPOIMENTO 1 (placeholder — substituir pelo texto real) -->
+      <div class="av-card">
+        <div class="av-card-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+        </div>
+        <p class="av-quote">"Profissional com atendimento humanizado, atencioso e interessado na qualidade de vida do paciente. Foi extremamente sincero e justo, me orientando sobre o que eu precisava para iniciar o tratamento. Transmite confiança e competência durante a consulta."</p>
+        <div class="av-author">
+          <div class="av-avatar">M</div>
+          <div><strong>Michele Silva de Oliveira</strong><span>Avaliação no Google</span></div>
+        </div>
+      </div>
+      <!-- DEPOIMENTO 2 -->
+      <div class="av-card">
+        <div class="av-card-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+        </div>
+        <p class="av-quote">"Ótimo atendimento. Dr. Hugnei, médico maravilhoso e atencioso. Fiz uma cirurgia de varizes com ele e estou muito satisfeita, minhas pernas estão ótimas. Atendimento nota 10 também para os atendentes, todos atenciosos e muito educados."</p>
+        <div class="av-author">
+          <div class="av-avatar">R</div>
+          <div><strong>Rosane Freitas</strong><span>Avaliação no Google</span></div>
+        </div>
+      </div>
+      <!-- DEPOIMENTO 3 -->
+      <div class="av-card">
+        <div class="av-card-stars">
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+          <svg viewBox="0 0 24 24"><polygon points="12,2 15,9 22,9.5 17,14.5 18.5,21.5 12,17.5 5.5,21.5 7,14.5 2,9.5 9,9"/></svg>
+        </div>
+        <p class="av-quote">"Gostaria de agradecer ao Dr. Hugnei pelo excelente atendimento desde a consulta até a realização da cirurgia. Em todos os momentos demonstrou profissionalismo, atenção, competência e cuidado com o paciente. A cirurgia foi um sucesso."</p>
+        <div class="av-author">
+          <div class="av-avatar">D</div>
+          <div><strong>Diogo Amaral</strong><span>Local Guide · Avaliação no Google</span></div>
+        </div>
+      </div>
+    </div>
+
+    <div class="av-cta">
+      <a href="https://g.page/r/CcfxVewpQwm9EBM/review" target="_blank" rel="noopener" class="av-cta-btn">
+        <svg viewBox="0 0 24 24" fill="none"><path d="M21 8.5a6 6 0 00-11.5-2.3A6 6 0 003 8.5c0 4.5 9 11 9 11s9-6.5 9-11z" stroke="var(--gold)" stroke-width="1.8"/></svg>
+        Avalie-nos no Google
+      </a>
+    </div>
+
+    <!-- MAPA -->
+    <div class="mapa-wrap">
+      <iframe src="https://www.google.com/maps?q=CTDMI+Angiologia+e+Cirurgia+Vascular,+Rua+Dias+da+Cruz,+155,+Méier,+Rio+de+Janeiro&output=embed" loading="lazy" referrerpolicy="no-referrer-when-downgrade" title="Mapa CTDMI – Méier, Rio de Janeiro"></iframe>
     </div>
   </div>
 </section>
@@ -627,7 +735,7 @@
         <div class="modal-perk"><svg viewBox="0 0 24 24"><polyline points="20 6 9 17 4 12"/></svg>Resposta rápida pelo WhatsApp</div>
       </div>
       <div class="modal-btns">
-        <a href="https://wa.me/5521996141313?text=Olá,%20vim%20pelo%20site%20e%20gostaria%20de%20agendar%20uma%20consulta." class="modal-btn whats" id="modalWhats">
+        <a href="https://wa.me/5521996141313?text=Olá,%20gostaria%20de%20agendar%20uma%20consulta%20com%20o%20Dr.%20Hugnei%20no%20C.T.D.M.I.%20do%20Méier" class="modal-btn whats" id="modalWhats">
           <svg viewBox="0 0 24 24"><path d="M21 11.5a8.38 8.38 0 01-.9 3.8 8.5 8.5 0 01-7.6 4.7 8.38 8.38 0 01-3.8-.9L3 21l1.9-5.7a8.38 8.38 0 01-.9-3.8 8.5 8.5 0 014.7-7.6 8.38 8.38 0 013.8-.9h.5a8.48 8.48 0 018 8v.5z"/></svg>
           Agendar pelo WhatsApp
         </a>
